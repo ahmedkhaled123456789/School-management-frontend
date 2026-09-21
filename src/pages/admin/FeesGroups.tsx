@@ -1,0 +1,13 @@
+import { CrudResourcePage } from '../../components/admin/CrudResourcePage';
+import { useCreateFeesGroup, useDeleteFeesGroup, useFeesGroups, useUpdateFeesGroup } from '../../hooks/finance';
+import type { FeesGroup } from '../../types/finance';
+
+export function AdminFeesGroups() {
+  const query = useFeesGroups(); const create = useCreateFeesGroup(); const update = useUpdateFeesGroup(); const remove = useDeleteFeesGroup();
+  return <CrudResourcePage<FeesGroup> title="Fees Groups" description="Create and maintain the fee groups used by the school." entityName="Fees group" query={query} rowKey={(row) => row._id} searchAccessor={(row) => Object.values(row).filter((value) => typeof value === 'string' || typeof value === 'number').join(' ')} isSaving={create.isPending || update.isPending} isDeleting={remove.isPending} emptyDescription="Create a fees group to organize school charges." columns={[
+    { key: 'name', header: 'Name', render: (row) => <span className="font-semibold text-ink-900">{String(row.name ?? row.title ?? '—')}</span> },
+    { key: 'amount', header: 'Amount', render: (row) => String(row.amount ?? '—') },
+    { key: 'description', header: 'Description', render: (row) => String(row.description ?? '—') },
+    { key: 'status', header: 'Status', render: (row) => String(row.status ?? '—') }
+  ]} fields={[{ name: 'name', label: 'Name', type: 'text', required: true }, { name: 'amount', label: 'Amount', type: 'text' }, { name: 'description', label: 'Description', type: 'textarea' }, { name: 'status', label: 'Status', type: 'text' }]} toFormValues={(row) => ({ name: String(row.name ?? row.title ?? ''), amount: String(row.amount ?? ''), description: String(row.description ?? ''), status: String(row.status ?? '') })} onCreate={(values) => create.mutateAsync(Object.fromEntries(Object.entries(values).filter(([, value]) => value.trim() !== '')))} onUpdate={(row, values) => update.mutateAsync({ id: row._id, payload: Object.fromEntries(Object.entries(values).filter(([, value]) => value.trim() !== '')) })} onDelete={(row) => remove.mutateAsync(row._id)} renderDetails={(row) => <dl className="space-y-3 text-sm">{Object.entries(row).filter(([key]) => key !== '_id').map(([key, value]) => <div key={key}><dt className="font-bold capitalize text-ink-500">{key.replace(/[A-Z]/g, (letter) => ` ${letter.toLowerCase()}`)}</dt><dd className="mt-1 text-ink-700">{String(value ?? '—')}</dd></div>)}</dl>} />;
+}
