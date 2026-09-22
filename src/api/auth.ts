@@ -11,14 +11,29 @@ const LOGIN_PATHS: Record<Role, string> = {
 interface RawLogin {
   status?: string;
   message?: string;
-  data?: string | {token?: string;[key: string]: unknown;};
+  data?: unknown;
   token?: string;
+  accessToken?: string;
+  access?: unknown;
   user?: Record<string, unknown>;
 }
 
+function findToken(value: unknown, depth = 0): string | undefined {
+  if (depth > 4 || value === null || typeof value !== 'object') return undefined;
+
+  const record = value as Record<string, unknown>;
+  const directToken = [record.token, record.accessToken]
+    .find((candidate): candidate is string => typeof candidate === 'string' && candidate.trim().length > 0);
+
+  if (directToken) return directToken.trim();
+
+  return [record.data, record.access]
+    .map((nested) => findToken(nested, depth + 1))
+    .find((candidate): candidate is string => Boolean(candidate));
+}
+
 /**
- * The backend returns the JWT either as `data` (string) or nested on the payload.
- * Normalize both shapes into a single `LoginResponse`.
+ * Normalize the backend's supported token envelopes into one login response.
  */
 export async function login(role: Role, payload: LoginPayload): Promise<LoginResponse> {
   const raw = await request<RawLogin>(LOGIN_PATHS[role], {
@@ -28,20 +43,22 @@ export async function login(role: Role, payload: LoginPayload): Promise<LoginRes
   });
 
   const token =
-  typeof raw.data === 'string' ?
-  raw.data :
-  raw.data?.token as string | undefined ?? raw.token ?? '';
+    typeof raw.data === 'string' ?
+    raw.data.trim() :
+    findToken(raw) ?? '';
 
   const userSource =
-  (typeof raw.data === 'object' && raw.data !== null ? raw.data : undefined) ?? raw.user ?? {};
+    (typeof raw.data === 'object' && raw.data !== null ? raw.data : undefined) ?? raw.user ?? {};
+
+  const userRecord = userSource as Record<string, unknown>;
 
   return {
     token,
     user: {
-      _id: String((userSource as Record<string, unknown>)._id ?? ''),
-      name: (userSource as Record<string, unknown>).name as string | undefined,
+      _id: String(userRecord._id ?? ''),
+      name: userRecord.name as string | undefined,
       email:
-      (userSource as Record<string, unknown>).email as string | undefined ?? payload.email,
+        userRecord.email as string | undefined ?? payload.email,
       role
     }
   };

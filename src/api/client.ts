@@ -9,14 +9,14 @@ export type { ApiErrorKind };
 /* -------------------------------------------------------------------------- */
 
 function configuredBaseUrl(): string {
-  const fromEnv =
+  const env =
     typeof import.meta !== 'undefined'
-      ? (import.meta as unknown as {
-          env?: Record<string, string>;
-        }).env?.VITE_API_BASE_URL
+      ? (import.meta as unknown as {env?: Record<string, string>;}).env
       : undefined;
+  const fromEnv = env?.VITE_API_BASE_URL ?? env?.VITE_API_URL;
 
-  return fromEnv || 'https://dashboard-school-node-js.vercel.app/api/v1';
+  return fromEnv ||
+    (env?.DEV ? '/api/v1' : 'https://dashboard-school-node-js.vercel.app/api/v1');
 }
 
 /** Base URL for the real Express backend. */
@@ -222,7 +222,7 @@ export async function request<T>(
   }
 
   if (!anonymous) {
-    const token = tokenStore.getToken();
+    const token = tokenStore.getToken()?.trim();
 
     if (token) {
       headers.Authorization = `Bearer ${token}`;
