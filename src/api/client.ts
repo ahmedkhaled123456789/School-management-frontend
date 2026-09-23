@@ -120,7 +120,7 @@ function buildUrl(
   path: string,
   params?: RequestOptions['params']
 ): string {
-  const url = `${API_BASE_URL}${path.startsWith('/') ? path : `/${path}`}`;
+  const url = `${API_BASE_URL.replace(/\/$/, '')}${path.startsWith('/') ? path : `/${path}`}`;
 
   if (!params) return url;
 
@@ -224,9 +224,19 @@ export async function request<T>(
   if (!anonymous) {
     const token = tokenStore.getToken()?.trim();
 
-    if (token) {
-      headers.Authorization = `Bearer ${token}`;
+    if (!token) {
+      console.error('[api] Protected request has no stored token', {
+        path,
+        apiBaseUrl: API_BASE_URL
+      });
+      throw new ApiError(FRIENDLY.unauthorized, 401, 'unauthorized');
     }
+
+    headers.Authorization = `Bearer ${token}`;
+    console.debug('[api] Protected request authorization attached', {
+      path,
+      tokenLength: token.length
+    });
   }
 
   let response: Response;

@@ -19,7 +19,8 @@ interface RawLogin {
 }
 
 function findToken(value: unknown, depth = 0): string | undefined {
-  if (depth > 4 || value === null || typeof value !== 'object') return undefined;
+  if (typeof value === 'string' && value.trim()) return value.trim();
+  if (depth > 6 || value === null || typeof value !== 'object') return undefined;
 
   const record = value as Record<string, unknown>;
   const directToken = [record.token, record.accessToken]
@@ -27,7 +28,7 @@ function findToken(value: unknown, depth = 0): string | undefined {
 
   if (directToken) return directToken.trim();
 
-  return [record.data, record.access]
+  return Object.values(record)
     .map((nested) => findToken(nested, depth + 1))
     .find((candidate): candidate is string => Boolean(candidate));
 }
@@ -42,10 +43,7 @@ export async function login(role: Role, payload: LoginPayload): Promise<LoginRes
     anonymous: true
   });
 
-  const token =
-    typeof raw.data === 'string' ?
-    raw.data.trim() :
-    findToken(raw) ?? '';
+  const token = findToken(raw) ?? '';
 
   const userSource =
     (typeof raw.data === 'object' && raw.data !== null ? raw.data : undefined) ?? raw.user ?? {};
