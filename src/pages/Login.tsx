@@ -105,7 +105,7 @@ export function LoginPage() {
         className="relative w-full max-w-[420px] overflow-hidden rounded-2xl bg-white shadow-pop">
         
         <div className="flex justify-center border-b border-ink-100 bg-primary-800 px-6 py-5">
-          <Logo imageClassName="h-12" />
+          <Logo imageClassName="h-16" />
         </div>
 
         <div className="px-6 py-6 sm:px-7">

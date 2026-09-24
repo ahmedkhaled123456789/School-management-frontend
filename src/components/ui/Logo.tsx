@@ -1,10 +1,10 @@
 import React from 'react';
 import { cn } from '../../utils/cn';
 
-export const LOGO_URL = "/Gemini_Generated_Image_5krt275krt275krt-removebg-preview_(1).png";
+export const LOGO_URL = "/logo.png";
 
 
-export const SCHOOL_NAME = 'Al Maaref American School';
+export const SCHOOL_NAME = 'Al Shorouk American School';
 
 interface LogoProps {
   /** Light-on-dark artwork: place it on a dark surface, or let it sit on a dark plate. */
@@ -18,7 +18,7 @@ export function Logo({ surface = 'dark', className, imageClassName }: LogoProps)
   <img
     src={LOGO_URL}
     alt={SCHOOL_NAME}
-    className={cn('h-10 w-auto object-contain', imageClassName)} />;
+    className={cn('h-14 w-auto object-contain', imageClassName)} />;
 
 
 

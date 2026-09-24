@@ -56,7 +56,7 @@ function NavList({ items, onNavigate }: {items: NavItem[];onNavigate?: () => voi
 function Brand() {
   return (
     <div className="px-5 py-5">
-      <Logo imageClassName="h-12" />
+      <Logo imageClassName="h-16" />
     </div>);
 
 }
