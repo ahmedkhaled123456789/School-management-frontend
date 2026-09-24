@@ -19,7 +19,6 @@ interface RawLogin {
 }
 
 function findToken(value: unknown, depth = 0): string | undefined {
-  if (typeof value === 'string' && value.trim()) return value.trim();
   if (depth > 6 || value === null || typeof value !== 'object') return undefined;
 
   const record = value as Record<string, unknown>;
@@ -29,6 +28,7 @@ function findToken(value: unknown, depth = 0): string | undefined {
   if (directToken) return directToken.trim();
 
   return Object.values(record)
+    .filter((nested) => typeof nested === 'object' && nested !== null)
     .map((nested) => findToken(nested, depth + 1))
     .find((candidate): candidate is string => Boolean(candidate));
 }
