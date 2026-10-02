@@ -1,4 +1,3 @@
-import React from 'react';
 import { Link, Navigate, Outlet, useLocation } from 'react-router-dom';
 import { useAuth } from '../../hooks/auth';
 import { homePathForRole, loginPathForRole } from '../../lib/routes';

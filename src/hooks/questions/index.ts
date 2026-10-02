@@ -65,11 +65,7 @@ export function useUpdateQuestion(examID: string) {
   });
 }
 
-/*
- * BACKEND REQUIRED — DELETE /api/v1/questions/:id is not documented in the API
- * contract. The service function exists but this hook must stay unused until the
- * backend confirms the route.
- */
+/** DELETE /questions/:id — also removes the question from its exam. */
 export function useDeleteQuestion(examID: string) {
   const queryClient = useQueryClient();
   return useMutation({
@@ -77,6 +73,7 @@ export function useDeleteQuestion(examID: string) {
     onSuccess: () => {
       toast.success('Question removed.');
       queryClient.invalidateQueries({ queryKey: queryKeys.questions(examID) });
+      queryClient.invalidateQueries({ queryKey: queryKeys.exam(examID) });
     },
     onError: (error) => toast.error(errorMessage(error))
   });

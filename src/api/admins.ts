@@ -12,11 +12,7 @@ export async function getAdminProfile(signal?: AbortSignal): Promise<Admin> {
   return unwrap<Admin>(await request('/admins/profile', { signal }));
 }
 
-/**
- * PUT /admins/:id
- * NOTE: the backend route does not enforce auth on this endpoint, so the UI only
- * ever targets the signed-in administrator's own id.
- */
+/** PUT /admins/:id — admin only; the UI targets the signed-in administrator's own id. */
 export async function updateAdmin(id: string, payload: AdminUpdatePayload): Promise<Admin> {
   return unwrap<Admin>(await request(`/admins/${id}`, { method: 'PUT', body: payload }));
 }

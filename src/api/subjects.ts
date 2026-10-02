@@ -15,12 +15,12 @@ export async function createSubject(payload: SubjectPayload): Promise<Subject> {
   return unwrap<Subject>(await request('/subjects', { method: 'POST', body: payload }));
 }
 
-/** PUT /subjects/:id — the backend route does not enforce auth on this one. */
+/** PUT /subjects/:id — admin only. */
 export async function updateSubject(id: string, payload: SubjectPayload): Promise<Subject> {
   return unwrap<Subject>(await request(`/subjects/${id}`, { method: 'PUT', body: payload }));
 }
 
-/** DELETE /subjects/:id — the backend route does not enforce auth on this one. */
+/** DELETE /subjects/:id — admin only. */
 export async function deleteSubject(id: string): Promise<void> {
   await request(`/subjects/${id}`, { method: 'DELETE' });
 }

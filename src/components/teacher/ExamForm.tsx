@@ -10,7 +10,9 @@ import { usePrograms } from '../../hooks/programs';
 import { useSubjects } from '../../hooks/subjects';
 import type { Exam, ExamPayload } from '../../types/exam';
 
-export type ExamFormValues = Record<keyof ExamPayload, string>;
+export type ExamFormValues = Record<
+  Exclude<keyof ExamPayload, 'examStatus' | 'passMark' | 'totalMark'>,
+  string>;
 
 const EMPTY: ExamFormValues = {
   name: '',
@@ -28,7 +30,12 @@ const EMPTY: ExamFormValues = {
 
 function toValues(exam?: Exam | null): ExamFormValues {
   if (!exam) return EMPTY;
-  const asId = (value: unknown) => typeof value === 'string' ? value : '';
+  const asId = (value: unknown) =>
+  typeof value === 'string' ?
+  value :
+  value && typeof value === 'object' && '_id' in value ?
+  String((value as {_id: unknown;})._id) :
+  '';
   return {
     name: exam.name ?? '',
     description: exam.description ?? '',

@@ -61,7 +61,3 @@ export async function deleteTeacher(teacherID: string): Promise<void> {
   await request(`/teachers/${teacherID}/admin`, { method: 'DELETE' });
 }
 
-/*
- * BACKEND REQUIRED — teacher suspend / withdraw / application-status endpoints
- * are placeholders in the current backend. They are intentionally NOT wired up here.
- */

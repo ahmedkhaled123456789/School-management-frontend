@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { PlusIcon } from 'lucide-react';
 import { Badge } from '../../components/ui/Badge';
@@ -6,12 +6,18 @@ import { Button } from '../../components/ui/Button';
 import { Card, CardBody, CardHeader } from '../../components/ui/Card';
 import { PageHeader } from '../../components/ui/PageHeader';
 import { Skeleton, SkeletonText } from '../../components/ui/Skeleton';
-import { BackendRequired, EmptyState, ErrorState } from '../../components/ui/States';
+import { ConfirmDialog } from '../../components/ui/ConfirmDialog';
+import { EmptyState, ErrorState } from '../../components/ui/States';
 import { ExamForm } from '../../components/teacher/ExamForm';
 import { QuestionCard } from '../../components/teacher/QuestionCard';
 import { QuestionEditor } from '../../components/teacher/QuestionEditor';
 import { useExam, useUpdateExam } from '../../hooks/exams';
-import { useCreateQuestion, useQuestions, useUpdateQuestion } from '../../hooks/questions';
+import {
+  useCreateQuestion,
+  useDeleteQuestion,
+  useQuestions,
+  useUpdateQuestion } from
+'../../hooks/questions';
 import type { Question } from '../../types/question';
 import { formatDate } from '../../utils/format';
 
@@ -22,6 +28,8 @@ export function TeacherExamDetail() {
   const questions = useQuestions(examID, exam.data?.questions);
   const createQuestion = useCreateQuestion(examID);
   const updateQuestion = useUpdateQuestion(examID);
+  const deleteQuestion = useDeleteQuestion(examID);
+  const [pendingDelete, setPendingDelete] = useState<Question | null>(null);
 
   const [isEditing, setIsEditing] = useState(false);
   const [editorOpen, setEditorOpen] = useState(false);
@@ -118,7 +126,8 @@ export function TeacherExamDetail() {
                 onEdit={() => {
                   setEditing(question);
                   setEditorOpen(true);
-                }} />
+                }}
+                onDelete={() => setPendingDelete(question)} />
 
               )}
               </CardBody>
@@ -178,11 +187,35 @@ export function TeacherExamDetail() {
             </CardBody>
           </Card>
 
-          <BackendRequired
-            feature="Publishing this paper to students"
-            detail="Exam status transitions and student-facing question delivery are not exposed by the API contract. Result publishing is a separate admin action on each exam result."
-            endpoint="GET /api/v1/students/exam/:examID" />
-          
+          <Card>
+            <CardHeader
+              title="Availability"
+              description={
+              exam.data?.examStatus === 'live' ?
+              'Students in this class level can sit this exam now.' :
+              'Students can see this exam but cannot start it until it is live.'
+              } />
+            
+            <CardBody>
+              <Button
+                fullWidth
+                variant={exam.data?.examStatus === 'live' ? 'secondary' : 'primary'}
+                disabled={exam.isLoading || updateExam.isPending || exam.data?.examStatus !== 'live' && items.length === 0}
+                onClick={() =>
+                updateExam.mutate({
+                  id: examID,
+                  payload: { examStatus: exam.data?.examStatus === 'live' ? 'pending' : 'live' }
+                })
+                }>
+                
+                {exam.data?.examStatus === 'live' ? 'Move back to pending' : 'Make exam live'}
+              </Button>
+              {exam.data?.examStatus !== 'live' && items.length === 0 &&
+              <p className="mt-2 text-[12.5px] text-ink-500">Add at least one question first.</p>
+              }
+            </CardBody>
+          </Card>
+
         </div>
       </div>
 
@@ -199,6 +232,24 @@ export function TeacherExamDetail() {
         updateQuestion.mutateAsync({ id: editing._id, payload }) :
         createQuestion.mutateAsync(payload)
         } />
+
+      <ConfirmDialog
+        open={Boolean(pendingDelete)}
+        title="Delete question?"
+        message="This question will be removed from the exam permanently."
+        confirmLabel="Delete"
+        tone="danger"
+        isLoading={deleteQuestion.isPending}
+        onCancel={() => setPendingDelete(null)}
+        onConfirm={async () => {
+          if (!pendingDelete) return;
+          try {
+            await deleteQuestion.mutateAsync(pendingDelete._id);
+            setPendingDelete(null);
+          } catch {
+
+            // Toast handled by the mutation hook.
+          }}} />
       
     </>);
 

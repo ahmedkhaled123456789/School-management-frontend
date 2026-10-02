@@ -20,15 +20,8 @@ export async function updateExam(id: string, payload: Partial<ExamPayload>): Pro
 }
 
 /**
- * BACKEND REQUIRED — GET /api/v1/students/exam/:examID
- *
- * Student-safe paper: exam info + questions and their options, WITHOUT `correctAnswer`.
- * The real Express backend does not implement this route yet, so against a live server
- * this call 404s and the runner shows the BACKEND REQUIRED notice. In demo mode the
- * in-memory transport serves it (with the answers stripped) so the flow can be tested.
- *
- * We deliberately never fall back to the teacher/admin question endpoints, which leak
- * the correct answers to the student.
+ * GET /students/exam/:examID — student-safe paper: exam info + questions and their
+ * options, WITHOUT `correctAnswer`. Only works while the exam is live.
  */
 export async function getStudentExam(
 examID: string,

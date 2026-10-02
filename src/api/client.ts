@@ -194,7 +194,6 @@ export async function request<T>(
     anonymous,
     timeoutMs = 60000
   } = options;
-  console.log({timeoutMs});
   const controller = new AbortController();
 
   const timeout = window.setTimeout(() => {
@@ -225,18 +224,10 @@ export async function request<T>(
     const token = tokenStore.getToken()?.trim();
 
     if (!token) {
-      console.error('[api] Protected request has no stored token', {
-        path,
-        apiBaseUrl: API_BASE_URL
-      });
       throw new ApiError(FRIENDLY.unauthorized, 401, 'unauthorized');
     }
 
     headers.Authorization = `Bearer ${token}`;
-    console.debug('[api] Protected request authorization attached', {
-      path,
-      tokenLength: token.length
-    });
   }
 
   let response: Response;

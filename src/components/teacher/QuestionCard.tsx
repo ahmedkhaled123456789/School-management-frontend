@@ -1,5 +1,4 @@
-import React from 'react';
-import { CheckCircle2Icon, PencilIcon } from 'lucide-react';
+import { CheckCircle2Icon, PencilIcon, Trash2Icon } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { cn } from '../../utils/cn';
 import type { Question } from '../../types/question';
@@ -10,9 +9,10 @@ interface QuestionCardProps {
   question: Question;
   index: number;
   onEdit?: () => void;
+  onDelete?: () => void;
 }
 
-export function QuestionCard({ question, index, onEdit }: QuestionCardProps) {
+export function QuestionCard({ question, index, onEdit, onDelete }: QuestionCardProps) {
   return (
     <article className="rounded-xl border border-ink-200/80 bg-white p-4 shadow-card sm:p-5">
       <div className="flex items-start justify-between gap-3">
@@ -24,16 +24,28 @@ export function QuestionCard({ question, index, onEdit }: QuestionCardProps) {
             {question.question}
           </h3>
         </div>
-        {onEdit &&
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={onEdit}
-          icon={<PencilIcon className="h-3.5 w-3.5" aria-hidden="true" />}>
-          
-            Edit
-          </Button>
-        }
+        <div className="flex shrink-0 gap-1">
+          {onEdit &&
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={onEdit}
+            icon={<PencilIcon className="h-3.5 w-3.5" aria-hidden="true" />}>
+            
+              Edit
+            </Button>
+          }
+          {onDelete &&
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={onDelete}
+            icon={<Trash2Icon className="h-3.5 w-3.5" aria-hidden="true" />}>
+            
+              Delete
+            </Button>
+          }
+        </div>
       </div>
 
       <ul className="mt-4 grid gap-2 sm:grid-cols-2">

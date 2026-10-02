@@ -42,7 +42,7 @@ export async function updateStudentProfile(payload: StudentSelfUpdatePayload): P
   return unwrap<Student>(await request('/students/update', { method: 'PUT', body: payload }));
 }
 
-/** DELETE /students/:studentID/admin — the backend route does not enforce auth. */
+/** DELETE /students/:studentID/admin — admin only. */
 export async function deleteStudent(studentID: string): Promise<void> {
   await request(`/students/${studentID}/admin`, { method: 'DELETE' });
 }

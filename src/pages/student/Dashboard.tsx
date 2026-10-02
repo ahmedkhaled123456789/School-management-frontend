@@ -1,4 +1,3 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
 import { AwardIcon, CalendarDaysIcon, ClipboardListIcon, UserIcon } from 'lucide-react';
 import { Badge } from '../../components/ui/Badge';

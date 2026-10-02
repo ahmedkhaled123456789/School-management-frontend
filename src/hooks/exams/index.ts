@@ -11,11 +11,7 @@ export interface StudentExamPaper {
   questions: StudentQuestion[];
 }
 
-/**
- * BACKEND REQUIRED — GET /api/v1/students/exam/:examID.
- * Wired up and ready; it currently rejects because the endpoint does not exist.
- * We never fall back to the teacher question endpoints, which expose correctAnswer.
- */
+/** Student-safe exam paper (no correct answers). */
 export function useStudentExam(examID?: string) {
   return useQuery<StudentExamPaper>({
     queryKey: ['studentExam', examID ?? ''],

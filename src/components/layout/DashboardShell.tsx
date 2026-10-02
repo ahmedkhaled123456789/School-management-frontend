@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { NavLink, Outlet, useLocation } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { LogOutIcon, MenuIcon, XIcon } from 'lucide-react';
@@ -7,7 +7,6 @@ import { useAuth } from '../../hooks/auth';
 import type { Role } from '../../types/common';
 import { cn } from '../../utils/cn';
 import { initials } from '../../utils/format';
-import { Button } from '../ui/Button';
 import { ConfirmDialog } from '../ui/ConfirmDialog';
 import { ROLE_LABEL, type NavItem } from './navigation';
 

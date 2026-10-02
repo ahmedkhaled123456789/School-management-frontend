@@ -1,4 +1,3 @@
-import React from 'react';
 import { CrudResourcePage } from '../../components/admin/CrudResourcePage';
 import {
   useAcademicTerms,

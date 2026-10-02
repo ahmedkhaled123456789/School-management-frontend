@@ -21,6 +21,7 @@ export interface PaginatedResult<T> {
 }
 
 export interface ListParams {
+  [key: string]: string | number | undefined;
   page?: number;
   limit?: number;
   name?: string;

@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { CheckCircle2Icon, Loader2Icon } from 'lucide-react';
 import { toast } from 'sonner';
 import { errorMessage } from '../../api/client';
 import { Button } from '../../components/ui/Button';
-import { BackendRequired } from '../../components/ui/States';
+import { Card } from '../../components/ui/Card';
+import { ErrorState } from '../../components/ui/States';
 import { ExamRunnerView } from '../../components/student/ExamRunnerView';
 import { useStudentExam } from '../../hooks/exams';
 import { useWriteExam } from '../../hooks/students';
@@ -49,15 +50,15 @@ export function StudentExamRunner() {
 
   }
 
-  // Expected until the student-safe exam endpoint ships.
+  // e.g. the exam is not live yet, was already written, or is not for this class.
   if (paper.isError || !paper.data) {
     return (
       <div className="flex min-h-screen w-full items-center justify-center bg-canvas px-5 py-10">
         <div className="w-full max-w-lg">
-          <BackendRequired
-            feature="Loading this exam for a student"
-            detail="The exam interface is fully built and wired to a student-safe endpoint, but the backend does not expose one yet. It must return the exam and its questions with options — and must never include correctAnswer. Teacher and admin question endpoints are deliberately not used here."
-            endpoint="GET /api/v1/students/exam/:examID" />
+          <Card>
+            <ErrorState
+              error={paper.error ?? new Error('The exam paper could not be loaded.')} />
+          </Card>
           
           <div className="mt-5 flex flex-wrap gap-2">
             <Link to="/student/exams">

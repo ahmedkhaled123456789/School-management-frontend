@@ -32,4 +32,7 @@ export interface ExamPayload {
   examDate?: string;
   examTime?: string;
   examType?: string;
+  examStatus?: ExamStatus;
+  passMark?: number;
+  totalMark?: number;
 }

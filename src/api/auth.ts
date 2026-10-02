@@ -62,7 +62,7 @@ export async function login(role: Role, payload: LoginPayload): Promise<LoginRes
   };
 }
 
-/** Fetches the signed-in principal for teacher/student. Admin has no profile endpoint. */
+/** Fetches the signed-in principal for teacher/student. */
 export async function fetchProfile(role: Role): Promise<Record<string, unknown> | null> {
   if (role === 'teacher') return unwrap(await request('/teachers/profile'));
   if (role === 'student') return unwrap(await request('/students/profile'));

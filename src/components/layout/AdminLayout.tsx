@@ -1,4 +1,3 @@
-import React from 'react';
 import { DashboardShell } from './DashboardShell';
 import { ADMIN_NAV } from './navigation';
 

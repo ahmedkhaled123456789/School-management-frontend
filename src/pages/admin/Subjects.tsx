@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { CrudResourcePage } from '../../components/admin/CrudResourcePage';
 import { useAcademicTerms } from '../../hooks/academicTerms';
 import { useTeachers } from '../../hooks/teachers';

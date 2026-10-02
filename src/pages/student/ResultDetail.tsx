@@ -1,4 +1,3 @@
-import React from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { CheckCircle2Icon, XCircleIcon } from 'lucide-react';
 import { Badge } from '../../components/ui/Badge';

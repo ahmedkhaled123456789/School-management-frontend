@@ -1,4 +1,3 @@
-import React from 'react';
 import { CrudResourcePage } from '../../components/admin/CrudResourcePage';
 import { Badge } from '../../components/ui/Badge';
 import {
