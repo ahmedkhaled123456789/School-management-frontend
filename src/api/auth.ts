@@ -57,7 +57,8 @@ export async function login(role: Role, payload: LoginPayload): Promise<LoginRes
       name: userRecord.name as string | undefined,
       email:
         userRecord.email as string | undefined ?? payload.email,
-      role
+      role,
+      image: userRecord.image as string | undefined
     }
   };
 }

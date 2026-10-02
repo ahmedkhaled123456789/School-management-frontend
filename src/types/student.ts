@@ -29,6 +29,7 @@ export interface Student extends Timestamped {
   religion?: string;
   status?: boolean;
   fatherEmail?: string;
+  image?: string;
 }
 
 export interface CreateStudentPayload {
@@ -68,6 +69,7 @@ export interface AdminUpdateStudentPayload {
   status?: boolean;
   classLevels?: string[];
   fatherEmail?: string;
+  image?: string;
 }
 
 export interface StudentSelfUpdatePayload {

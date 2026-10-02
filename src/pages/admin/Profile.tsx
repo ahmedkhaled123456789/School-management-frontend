@@ -9,7 +9,8 @@ import { SkeletonText } from '../../components/ui/Skeleton';
 import { ErrorState } from '../../components/ui/States';
 import { useAdminProfile, useUpdateAdmin } from '../../hooks/admins';
 import { useAuth } from '../../hooks/auth';
-import { initials } from '../../utils/format';
+import { useUpdateMyImage } from '../../hooks/profile';
+import { AvatarUploader } from '../../components/ui/AvatarUploader';
 import { emailField, requiredField, type Errors } from '../../utils/validation';
 
 interface FormValues {
@@ -38,6 +39,7 @@ export function AdminProfile() {
   const { session } = useAuth();
   const profile = useAdminProfile();
   const update = useUpdateAdmin();
+  const updateImage = useUpdateMyImage();
 
   const [isEditing, setIsEditing] = useState(false);
   const [values, setValues] = useState<FormValues>(EMPTY);
@@ -112,9 +114,11 @@ export function AdminProfile() {
         <Card>
           <CardBody>
             <div className="flex items-center gap-3">
-              <span className="flex h-14 w-14 items-center justify-center rounded-full bg-primary-600 text-lg font-bold text-white">
-                {initials(admin?.name || session?.user.name || session?.user.email)}
-              </span>
+              <AvatarUploader
+                image={admin?.image ?? session?.user.image}
+                name={admin?.name || session?.user.name}
+                isSaving={updateImage.isPending}
+                onChange={(image) => updateImage.mutateAsync(image)} />
               <div className="min-w-0">
                 <p className="truncate text-[15px] font-bold text-ink-900">
                   {admin?.name || session?.user.name || 'Administrator'}

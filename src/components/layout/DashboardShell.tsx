@@ -2,11 +2,11 @@ import { useEffect, useState } from 'react';
 import { NavLink, Outlet, useLocation } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { LogOutIcon, MenuIcon, XIcon } from 'lucide-react';
+import { Avatar } from '../ui/Avatar';
 import { Logo } from '../ui/Logo';
 import { useAuth } from '../../hooks/auth';
 import type { Role } from '../../types/common';
 import { cn } from '../../utils/cn';
-import { initials } from '../../utils/format';
 import { ConfirmDialog } from '../ui/ConfirmDialog';
 import { ROLE_LABEL, type NavItem } from './navigation';
 
@@ -168,9 +168,7 @@ export function DashboardShell({ role, navItems }: DashboardShellProps) {
               </p>
               <p className="text-[11.5px] capitalize text-ink-500">{role}</p>
             </div>
-            <span className="flex h-9 w-9 items-center justify-center rounded-full bg-primary-600 text-[13px] font-bold text-white">
-              {initials(session?.user.name || session?.user.email)}
-            </span>
+            <Avatar image={session?.user.image} name={displayName} size="md" />
             {/* <Button
               variant="ghost"
               size="sm"

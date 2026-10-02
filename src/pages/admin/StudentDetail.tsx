@@ -12,7 +12,8 @@ import { useAcademicYears } from '../../hooks/academicYears';
 import { useClassLevels } from '../../hooks/classes';
 import { usePrograms } from '../../hooks/programs';
 import { useStudent, useUpdateStudent } from '../../hooks/students';
-import { formatDate, initials, relationLabel } from '../../utils/format';
+import { formatDate, relationLabel } from '../../utils/format';
+import { AvatarUploader } from '../../components/ui/AvatarUploader';
 import { emailField, requiredField, type Errors } from '../../utils/validation';
 
 interface EditValues {
@@ -158,9 +159,11 @@ export function AdminStudentDetail() {
 
             <>
                 <div className="flex items-center gap-3">
-                  <span className="flex h-14 w-14 items-center justify-center rounded-full bg-primary-100 text-lg font-bold text-primary-700">
-                    {initials(student?.name)}
-                  </span>
+                  <AvatarUploader
+                    image={student?.image}
+                    name={student?.name}
+                    isSaving={update.isPending}
+                    onChange={(image) => update.mutateAsync({ image })} />
                   <div className="min-w-0">
                     <p className="truncate text-[15px] font-bold text-ink-900">{student?.name}</p>
                     <p className="truncate font-mono text-[12px] text-ink-500">

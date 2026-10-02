@@ -11,6 +11,7 @@ export interface Admin extends Timestamped {
   city?: string;
   /** Spelled `lauguage` by the backend model — kept verbatim so payloads match. */
   lauguage?: string;
+  image?: string;
   academicYears?: unknown[];
   academicTerms?: unknown[];
   classLevels?: unknown[];

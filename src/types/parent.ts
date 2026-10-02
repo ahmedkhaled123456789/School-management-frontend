@@ -8,6 +8,7 @@ export interface Parent extends Timestamped {
   address?: string;
   occupation?: string;
   religion?: string;
+  image?: string;
   student?: Array<string | { _id?: string; name?: string; studentId?: string }>;
   [key: string]: unknown;
 }

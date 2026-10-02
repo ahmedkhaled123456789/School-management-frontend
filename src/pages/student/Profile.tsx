@@ -7,7 +7,9 @@ import { PageHeader } from '../../components/ui/PageHeader';
 import { Skeleton, SkeletonText } from '../../components/ui/Skeleton';
 import { ErrorState } from '../../components/ui/States';
 import { useStudentProfile, useUpdateStudentProfile } from '../../hooks/students';
-import { formatDate, initials, relationLabel } from '../../utils/format';
+import { useUpdateMyImage } from '../../hooks/profile';
+import { AvatarUploader } from '../../components/ui/AvatarUploader';
+import { formatDate, relationLabel } from '../../utils/format';
 import { emailField, passwordField, type Errors } from '../../utils/validation';
 
 interface ProfileValues {
@@ -18,6 +20,7 @@ interface ProfileValues {
 export function StudentProfilePage() {
   const query = useStudentProfile();
   const update = useUpdateStudentProfile();
+  const updateImage = useUpdateMyImage();
   const student = query.data;
 
   const [values, setValues] = useState<ProfileValues>({ email: '', password: '' });
@@ -77,9 +80,11 @@ export function StudentProfilePage() {
 
             <>
                 <div className="flex items-center gap-3">
-                  <span className="flex h-14 w-14 items-center justify-center rounded-full bg-primary-100 text-lg font-bold text-primary-700">
-                    {initials(student?.name)}
-                  </span>
+                  <AvatarUploader
+                    image={student?.image}
+                    name={student?.name}
+                    isSaving={updateImage.isPending}
+                    onChange={(image) => updateImage.mutateAsync(image)} />
                   <div className="min-w-0">
                     <p className="truncate text-[15px] font-bold text-ink-900">{student?.name}</p>
                     <p className="truncate font-mono text-[12px] text-ink-500">

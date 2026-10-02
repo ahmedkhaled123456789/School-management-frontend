@@ -10,6 +10,7 @@ export interface AuthUser {
   name?: string;
   email?: string;
   role: Role;
+  image?: string;
 }
 
 export interface LoginResponse {

@@ -7,7 +7,9 @@ import { PageHeader } from '../../components/ui/PageHeader';
 import { Skeleton, SkeletonText } from '../../components/ui/Skeleton';
 import { ErrorState } from '../../components/ui/States';
 import { useTeacherProfile, useUpdateTeacherProfile } from '../../hooks/teachers';
-import { formatDate, initials, relationLabel } from '../../utils/format';
+import { useUpdateMyImage } from '../../hooks/profile';
+import { AvatarUploader } from '../../components/ui/AvatarUploader';
+import { formatDate, relationLabel } from '../../utils/format';
 import { emailField, passwordField, requiredField, type Errors } from '../../utils/validation';
 
 interface ProfileValues {
@@ -20,6 +22,7 @@ export function TeacherProfile() {
   const query = useTeacherProfile();
   const teacher = query.data;
   const update = useUpdateTeacherProfile(teacher?._id ?? '');
+  const updateImage = useUpdateMyImage();
 
   const [values, setValues] = useState<ProfileValues>({ name: '', email: '', password: '' });
   const [errors, setErrors] = useState<Errors<ProfileValues>>({});
@@ -80,9 +83,11 @@ export function TeacherProfile() {
 
             <>
                 <div className="flex items-center gap-3">
-                  <span className="flex h-14 w-14 items-center justify-center rounded-full bg-accent-50 text-lg font-bold text-accent-500">
-                    {initials(teacher?.name)}
-                  </span>
+                  <AvatarUploader
+                    image={teacher?.image}
+                    name={teacher?.name}
+                    isSaving={updateImage.isPending}
+                    onChange={(image) => updateImage.mutateAsync(image)} />
                   <div className="min-w-0">
                     <p className="truncate text-[15px] font-bold text-ink-900">{teacher?.name}</p>
                     <p className="truncate font-mono text-[12px] text-ink-500">

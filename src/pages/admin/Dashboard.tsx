@@ -24,7 +24,8 @@ import { usePrograms } from '../../hooks/programs';
 import { useStudents } from '../../hooks/students';
 import { useSubjects } from '../../hooks/subjects';
 import { useTeachers } from '../../hooks/teachers';
-import { formatDate, initials, relationLabel } from '../../utils/format';
+import { formatDate, relationLabel } from '../../utils/format';
+import { Avatar } from '../../components/ui/Avatar';
 
 const RECENT_PARAMS = { page: 1, limit: 5 };
 
@@ -174,9 +175,7 @@ export function AdminDashboard() {
                 to={`/admin/students/${student._id}`}
                 className="flex items-center gap-3 px-5 py-3.5 transition-colors hover:bg-primary-50/40">
                 
-                    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary-100 text-[12px] font-bold text-primary-700">
-                      {initials(student.name)}
-                    </span>
+                    <Avatar image={student.image} name={student.name} size="md" />
                     <span className="min-w-0 flex-1">
                       <span className="block truncate text-[14px] font-semibold text-ink-900">
                         {student.name}
@@ -307,9 +306,7 @@ export function AdminDashboard() {
                 to={`/admin/teachers/${teacher._id}`}
                 className="flex items-center gap-3 px-5 py-3 transition-colors hover:bg-primary-50/40">
                 
-                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-accent-50 text-[11.5px] font-bold text-accent-500">
-                      {initials(teacher.name)}
-                    </span>
+                    <Avatar image={teacher.image} name={teacher.name} size="sm" />
                     <span className="min-w-0 flex-1">
                       <span className="block truncate text-[13.5px] font-semibold text-ink-900">
                         {teacher.name}

@@ -20,6 +20,7 @@ export interface Teacher extends Timestamped {
   address?: string;
   religion?: string;
   classLevels?: string[];
+  image?: string;
 }
 
 export interface CreateTeacherPayload {
@@ -60,4 +61,5 @@ export interface AdminUpdateTeacherPayload {
   program?: string;
   classLevel?: string;
   academicYear?: string;
+  image?: string;
 }
