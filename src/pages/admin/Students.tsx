@@ -16,6 +16,7 @@ import { useCreateStudent, useDeleteStudent, useStudents } from '../../hooks/stu
 import { useClassLevels } from '../../hooks/classes';
 import type { Student } from '../../types/student';
 import { relationLabel } from '../../utils/format';
+import { Avatar } from '../../components/ui/Avatar';
 import { emailField, passwordField, requiredField, type Errors } from '../../utils/validation';
 
 const LIMIT = 10;
@@ -119,8 +120,9 @@ export function AdminStudents() {
             render: (row) =>
             <Link
               to={`/admin/students/${row._id}`}
-              className="font-semibold text-ink-900 hover:text-primary-600 hover:underline">
-              
+              className="flex items-center gap-3 font-semibold text-ink-900 hover:text-primary-600 hover:underline">
+
+                  <Avatar image={row.image} name={row.name} size="md" />
                   {row.name}
                 </Link>
 
@@ -130,7 +132,8 @@ export function AdminStudents() {
           {
             key: 'currentClassLevel',
             header: 'Current class',
-            render: (row) => row.currentClassLevel || '—'
+            // classLevels arrive populated ({ name }); the latest one is the current class
+            render: (row) => relationLabel(row.classLevels?.[row.classLevels.length - 1])
           },
           {
             key: 'academicYear',

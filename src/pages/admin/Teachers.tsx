@@ -17,6 +17,7 @@ import { useClassLevels } from '../../hooks/classes';
 import { useSubjects } from '../../hooks/subjects';
 import type { Teacher } from '../../types/teacher';
 import { relationLabel } from '../../utils/format';
+import { Avatar } from '../../components/ui/Avatar';
 import { emailField, passwordField, requiredField, type Errors } from '../../utils/validation';
 
 const LIMIT = 10;
@@ -117,8 +118,9 @@ export function AdminTeachers() {
             render: (row) =>
             <Link
               to={`/admin/teachers/${row._id}`}
-              className="font-semibold text-ink-900 hover:text-primary-600 hover:underline">
-              
+              className="flex items-center gap-3 font-semibold text-ink-900 hover:text-primary-600 hover:underline">
+
+                  <Avatar image={row.image} name={row.name} size="md" />
                   {row.name}
                 </Link>
 
@@ -126,7 +128,13 @@ export function AdminTeachers() {
           { key: 'email', header: 'Email', render: (row) => row.email },
           { key: 'subject', header: 'Subject', render: (row) => relationLabel(row.subject, 'Unassigned') },
           { key: 'program', header: 'Program', render: (row) => relationLabel(row.program, 'Unassigned') },
-          { key: 'classLevel', header: 'Class level', render: (row) => relationLabel(row.classLevel) },
+          {
+            key: 'classLevel',
+            header: 'Class level',
+            // classLevels arrive populated ({ name })
+            render: (row) =>
+            (row.classLevels ?? []).map((level) => relationLabel(level, '')).filter(Boolean).join(', ') || '—'
+          },
           {
             key: 'academicYear',
             header: 'Academic year',

@@ -3,6 +3,7 @@ import { useCreateParent, useParents, useUpdateParent } from '../../hooks/parent
 import { useStudents } from '../../hooks/students';
 import type { Parent } from '../../types/parent';
 import { relationLabel } from '../../utils/format';
+import { Avatar } from '../../components/ui/Avatar';
 
 function studentsLabel(value: Parent['student']): string {
   if (!Array.isArray(value) || value.length === 0) return '—';
@@ -26,7 +27,7 @@ export function AdminParents() {
     isSaving={create.isPending || update.isPending}
     emptyDescription="Register a parent account to connect families with students."
     columns={[
-      { key: 'name', header: 'Parent name', render: (row) => <span className="font-semibold text-ink-900">{row.name || '—'}</span> },
+      { key: 'name', header: 'Parent name', render: (row) => <span className="flex items-center gap-3 font-semibold text-ink-900"><Avatar image={row.image} name={row.name} size="md" />{row.name || '—'}</span> },
       { key: 'email', header: 'Email', render: (row) => row.email || '—' },
       { key: 'phone', header: 'Phone', render: (row) => row.phone || '—' },
       { key: 'address', header: 'Address', render: (row) => row.address || '—' },
