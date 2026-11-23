@@ -18,8 +18,8 @@ import { useAuth } from '../auth';
 
 /* ------------------------------- staff ----------------------------------- */
 
-export function useStaff() {
-  return useQuery({ queryKey: queryKeys.staff, queryFn: ({ signal }) => listStaff(signal) });
+export function useStaff(enabled = true) {
+  return useQuery({ queryKey: queryKeys.staff, queryFn: ({ signal }) => listStaff(signal), enabled });
 }
 
 export function useCreateStaff() {

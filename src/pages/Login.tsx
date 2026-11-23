@@ -8,11 +8,12 @@ import { Input } from '../components/ui/Input';
 import { Logo } from '../components/ui/Logo';
 import { useAuth, useLogin } from '../hooks/auth';
 import { homePathForRole } from '../lib/routes';
+import { useBranding } from '../hooks/branding';
+import { DEFAULT_LOGIN_BACKGROUND } from '../lib/branding';
 import type { Role } from '../types/common';
 import { cn } from '../utils/cn';
 import { emailField, passwordField, type Errors } from '../utils/validation';
 
-const BACKDROP = "/d74597ec-d7b0-43b2-85b3-78807e6ec9f3.jpg";
 
 
 const ROLES: Array<{value: Role;label: string;icon: typeof ShieldCheckIcon;blurb: string;}> = [
@@ -51,6 +52,7 @@ export function LoginPage() {
   const { role: roleParam } = useParams<{role: string;}>();
   const navigate = useNavigate();
   const { session } = useAuth();
+  const { branding } = useBranding();
 
   const role: Role = ROLES.some((item) => item.value === roleParam) ?
   roleParam as Role :
@@ -92,7 +94,7 @@ export function LoginPage() {
 
   return (
     <div className="relative flex h-screen w-full items-center justify-center overflow-hidden bg-primary-900 px-4 py-6">
-      <img src={BACKDROP} alt="" className="absolute inset-0 h-full w-full object-cover" />
+      <img src={branding.loginBackground || DEFAULT_LOGIN_BACKGROUND} alt="" className="absolute inset-0 h-full w-full object-cover" />
       <div className="absolute inset-0 bg-primary-900/85" />
       <div
         aria-hidden="true"
@@ -116,7 +118,7 @@ export function LoginPage() {
 
         <div className="px-6 py-6 sm:px-7">
           <h1 className="text-center text-[20px] font-extrabold tracking-tight text-ink-900">
-            Sign in to your workspace
+            Sign in to {branding.appName}
           </h1>
           <p className="mt-1 text-center text-[13px] leading-relaxed text-ink-500">
             {active.blurb}

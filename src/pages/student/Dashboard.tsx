@@ -9,10 +9,13 @@ import { StatCard } from '../../components/ui/StatCard';
 import { EmptyState, ErrorState } from '../../components/ui/States';
 import { useExamResults } from '../../hooks/examResults';
 import { useStudentProfile } from '../../hooks/students';
+import { useStudentWeek } from '../../hooks/sections';
+import { TodaySchedule } from '../../components/timetable/TodaySchedule';
 import { formatDate, relationLabel } from '../../utils/format';
 
 export function StudentDashboard() {
   const profile = useStudentProfile();
+  const week = useStudentWeek(profile.data?._id);
   const results = useExamResults();
 
   const items = results.data?.items ?? [];
@@ -75,6 +78,12 @@ export function StudentDashboard() {
           isUnavailable={profile.isError} />
         
       </section>
+
+      {week.section &&
+      <div className="mt-6">
+          <TodaySchedule schoolDay={week.schoolDay} entries={week.entries} perspective="section" isLoading={week.isLoading} weekHref="/student/timetable" emptyText="No lessons today." />
+        </div>
+      }
 
       <Card className="mt-6">
         <CardHeader

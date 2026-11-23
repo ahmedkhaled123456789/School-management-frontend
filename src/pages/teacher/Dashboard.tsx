@@ -9,11 +9,14 @@ import { StatCard } from '../../components/ui/StatCard';
 import { EmptyState, ErrorState } from '../../components/ui/States';
 import { useExams } from '../../hooks/exams';
 import { useTeacherProfile } from '../../hooks/teachers';
+import { useTeacherWeek } from '../../hooks/sections';
+import { TodaySchedule } from '../../components/timetable/TodaySchedule';
 import { formatDate, relationLabel } from '../../utils/format';
 
 export function TeacherDashboard() {
   const exams = useExams();
   const profile = useTeacherProfile();
+  const week = useTeacherWeek(profile.data?._id);
 
   const items = exams.data?.items ?? [];
   const live = items.filter((exam) => exam.examStatus === 'live').length;
@@ -63,6 +66,10 @@ export function TeacherDashboard() {
           hint="No teacher-scoped student count exists in the API contract." />
         
       </section>
+
+      <div className="mt-6">
+        <TodaySchedule schoolDay={week.schoolDay} entries={week.entries} perspective="teacher" isLoading={week.isLoading} weekHref="/teacher/timetable" emptyText="You have no periods today." />
+      </div>
 
       <Card className="mt-6">
         <CardHeader

@@ -1,13 +1,19 @@
 import type { LucideIcon } from 'lucide-react';
 import {
   AwardIcon,
+  ChartPieIcon,
+  PaletteIcon,
   BanknoteIcon,
   BookOpenIcon,
   ChartColumnIcon,
   FileTextIcon,
   PercentIcon,
   BriefcaseIcon,
+  CalendarDaysIcon,
   CalendarRangeIcon,
+  ClockIcon,
+  DoorOpenIcon,
+  LayoutGridIcon,
   ClipboardListIcon,
   FileQuestionIcon,
   GraduationCapIcon,
@@ -71,6 +77,7 @@ const P = PERMISSIONS;
 
 export const ADMIN_NAV: NavEntry[] = [
 { label: 'Dashboard', to: '/admin', icon: LayoutDashboardIcon, end: true },
+{ label: 'Reports', to: '/admin/reports', icon: ChartPieIcon },
 {
   id: 'students',
   label: 'Students',
@@ -88,6 +95,10 @@ export const ADMIN_NAV: NavEntry[] = [
   { label: 'Programs', to: '/admin/programs', icon: LayersIcon, permission: P.ACADEMICS_MANAGE },
   { label: 'Subjects', to: '/admin/subjects', icon: BookOpenIcon, permission: P.ACADEMICS_MANAGE },
   { label: 'Class Levels', to: '/admin/classes', icon: ListChecksIcon, permission: P.ACADEMICS_MANAGE },
+  { label: 'Sections', to: '/admin/academics/sections', icon: LayoutGridIcon, permission: P.ACADEMICS_MANAGE },
+  { label: 'Timetable', to: '/admin/academics/timetable', icon: CalendarDaysIcon, permission: P.ACADEMICS_MANAGE },
+  { label: 'Rooms', to: '/admin/academics/rooms', icon: DoorOpenIcon, permission: P.ACADEMICS_MANAGE },
+  { label: 'School Day', to: '/admin/academics/school-day', icon: ClockIcon, permission: P.ACADEMICS_MANAGE },
   { label: 'Academic Years', to: '/admin/academic-years', icon: CalendarRangeIcon, permission: P.ACADEMICS_MANAGE },
   { label: 'Academic Terms', to: '/admin/academic-terms', icon: ClipboardListIcon, permission: P.ACADEMICS_MANAGE },
   { label: 'Year Groups', to: '/admin/year-groups', icon: UsersIcon, permission: P.ACADEMICS_MANAGE },
@@ -124,7 +135,8 @@ export const ADMIN_NAV: NavEntry[] = [
   children: [
   { label: 'Administrators', to: '/admin/administrators', icon: ShieldCheckIcon, permission: P.ADMINS_MANAGE },
   { label: 'Audit Log', to: '/admin/audit-log', icon: HistoryIcon, permission: P.AUDIT_READ },
-  { label: 'School Settings', to: '/admin/settings', icon: SettingsIcon, permission: P.SETTINGS_MANAGE }]
+  { label: 'School Settings', to: '/admin/settings', icon: SettingsIcon, permission: P.SETTINGS_MANAGE },
+  { label: 'Branding', to: '/admin/branding', icon: PaletteIcon, permission: P.SETTINGS_MANAGE }]
 
 },
 { label: 'Profile', to: '/admin/profile', icon: UserCogIcon }];
@@ -132,6 +144,8 @@ export const ADMIN_NAV: NavEntry[] = [
 
 export const TEACHER_NAV: NavItem[] = [
 { label: 'Dashboard', to: '/teacher', icon: LayoutDashboardIcon, end: true },
+{ label: 'My Timetable', to: '/teacher/timetable', icon: CalendarDaysIcon },
+{ label: 'My Sections', to: '/teacher/sections', icon: LayoutGridIcon },
 { label: 'My Exams', to: '/teacher/exams', icon: ClipboardListIcon },
 { label: 'Create Exam', to: '/teacher/exams/new', icon: PlusSquareIcon },
 { label: 'Questions', to: '/teacher/questions', icon: FileQuestionIcon },
@@ -140,6 +154,7 @@ export const TEACHER_NAV: NavItem[] = [
 
 export const STUDENT_NAV: NavItem[] = [
 { label: 'Dashboard', to: '/student', icon: LayoutDashboardIcon, end: true },
+{ label: 'My Timetable', to: '/student/timetable', icon: CalendarDaysIcon },
 { label: 'My Profile', to: '/student/profile', icon: UserCogIcon },
 { label: 'My Exams', to: '/student/exams', icon: ClipboardListIcon },
 { label: 'Exam Results', to: '/student/results', icon: AwardIcon }];

@@ -74,8 +74,8 @@ useFinanceMutation((id: string) => api.deleteDiscount(id), 'Discount deleted.', 
 
 /* -------------------------------- invoices -------------------------------- */
 
-export const useInvoices = (params: ListParams) =>
-useQuery({ queryKey: queryKeys.invoices(params), queryFn: ({ signal }) => api.listInvoices(params, signal), placeholderData: keepPreviousData });
+export const useInvoices = (params: ListParams, enabled = true) =>
+useQuery({ queryKey: queryKeys.invoices(params), queryFn: ({ signal }) => api.listInvoices(params, signal), placeholderData: keepPreviousData, enabled });
 export const useInvoice = (id?: string) =>
 useQuery({ queryKey: queryKeys.invoice(id ?? ''), queryFn: ({ signal }) => api.getInvoice(id as string, signal), enabled: Boolean(id), retry: false });
 export const useCreateInvoice = () =>

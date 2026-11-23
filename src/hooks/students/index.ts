@@ -19,11 +19,12 @@ import type {
   StudentSelfUpdatePayload } from
 '../../types/student';
 
-export function useStudents(params: ListParams) {
+export function useStudents(params: ListParams, enabled = true) {
   return useQuery({
     queryKey: queryKeys.students(params),
     queryFn: ({ signal }) => listStudents(params, signal),
-    placeholderData: keepPreviousData
+    placeholderData: keepPreviousData,
+    enabled
   });
 }
 

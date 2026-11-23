@@ -12,8 +12,8 @@ import {
 import { queryKeys } from '../../lib/queryKeys';
 import type { CreateParentPayload, UpdateParentPayload } from '../../types/parent';
 
-export function useParents() {
-  return useQuery({ queryKey: queryKeys.parents, queryFn: ({ signal }) => listParents(signal) });
+export function useParents(enabled = true) {
+  return useQuery({ queryKey: queryKeys.parents, queryFn: ({ signal }) => listParents(signal), enabled });
 }
 
 export function useParent(id?: string) {

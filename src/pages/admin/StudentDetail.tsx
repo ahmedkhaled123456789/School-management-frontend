@@ -15,6 +15,7 @@ import { useStudent, useUpdateStudent } from '../../hooks/students';
 import { formatDate, relationLabel } from '../../utils/format';
 import { AvatarUploader } from '../../components/ui/AvatarUploader';
 import { StudentParentsCard } from '../../components/admin/ParentStudentLinks';
+import { AdminStudentSection } from '../../components/sections/AdminStudentSection';
 import { Avatar } from '../../components/ui/Avatar';
 import { usePermissions } from '../../hooks/permissions';
 import { PERMISSIONS } from '../../lib/permissions';
@@ -343,6 +344,7 @@ export function AdminStudentDetail() {
           readOnly={!canManage} />
 
       </div>
+      <AdminStudentSection studentId={studentID} />
     </>);
 
 }

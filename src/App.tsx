@@ -30,6 +30,18 @@ import { AdminYearGroups } from './pages/admin/YearGroups';
 import { AdminExamResults } from './pages/admin/ExamResults';
 import { AdminParents } from './pages/admin/Parents';
 import { AdminExpenses } from './pages/admin/Expenses';
+import { AdminSections } from './pages/admin/academics/Sections';
+import { AdminSectionDetail } from './pages/admin/academics/SectionDetail';
+import { AdminTimetable } from './pages/admin/academics/Timetable';
+import { AdminRooms } from './pages/admin/academics/Rooms';
+import { AdminSchoolDay } from './pages/admin/academics/SchoolDay';
+import { TeacherTimetable } from './pages/teacher/Timetable';
+import { TeacherMySections } from './pages/teacher/MySections';
+import { StudentTimetablePage } from './pages/student/Timetable';
+import { MockDbSync } from './components/sections/MockDbSync';
+import { AdminReports } from './pages/admin/reports/Reports';
+import { AdminBranding } from './pages/admin/Branding';
+import { BrandingProvider } from './components/branding/BrandingProvider';
 import { AdminInvoices } from './pages/admin/finance/Invoices';
 import { AdminInvoiceDetail } from './pages/admin/finance/InvoiceDetail';
 import { AdminPayments } from './pages/admin/finance/Payments';
@@ -57,10 +69,12 @@ import { ParentProfilePage } from './pages/parent/Profile';
 
 export function App() {
   return (
+    <BrandingProvider>
     <Provider store={store}>
       <QueryClientProvider client={queryClient}>
         <BrowserRouter>
           <SessionWatcher>
+          <MockDbSync />
           <Toaster
               position="top-right"
               richColors
@@ -85,6 +99,7 @@ export function App() {
               <Route path="/admin" element={<AdminLayout />}>
                 <Route index element={<AdminHome />} />
                 <Route path="profile" element={<AdminOrStaffProfile />} />
+                <Route path="reports" element={<AdminReports />} />
 
                 {/* each section is limited to the roles that hold its permission */}
                 <Route element={<RequirePermission permission={PERMISSIONS.STUDENTS_READ} />}>
@@ -104,6 +119,11 @@ export function App() {
                   <Route path="academic-terms" element={<AdminAcademicTerms />} />
                   <Route path="year-groups" element={<AdminYearGroups />} />
                   <Route path="exam-results" element={<AdminExamResults />} />
+                  <Route path="academics/sections" element={<AdminSections />} />
+                  <Route path="academics/sections/:sectionId" element={<AdminSectionDetail />} />
+                  <Route path="academics/timetable" element={<AdminTimetable />} />
+                  <Route path="academics/rooms" element={<AdminRooms />} />
+                  <Route path="academics/school-day" element={<AdminSchoolDay />} />
                 </Route>
                 <Route element={<RequirePermission permission={PERMISSIONS.FINANCE_MANAGE} />}>
                   <Route path="expenses" element={<AdminExpenses />} />
@@ -128,6 +148,7 @@ export function App() {
                 </Route>
                 <Route element={<RequirePermission permission={PERMISSIONS.SETTINGS_MANAGE} />}>
                   <Route path="settings" element={<AdminSettings />} />
+                  <Route path="branding" element={<AdminBranding />} />
                 </Route>
               </Route>
             </Route>
@@ -140,6 +161,8 @@ export function App() {
                 <Route path="exams/new" element={<TeacherExamBuilder />} />
                 <Route path="exams/:examID" element={<TeacherExamDetail />} />
                 <Route path="questions" element={<TeacherQuestions />} />
+                <Route path="timetable" element={<TeacherTimetable />} />
+                <Route path="sections" element={<TeacherMySections />} />
                 <Route path="profile" element={<TeacherProfile />} />
               </Route>
             </Route>
@@ -151,6 +174,7 @@ export function App() {
               <Route path="/student" element={<StudentLayout />}>
                 <Route index element={<StudentDashboard />} />
                 <Route path="profile" element={<StudentProfilePage />} />
+                <Route path="timetable" element={<StudentTimetablePage />} />
                 <Route path="exams" element={<StudentExams />} />
                 <Route path="results" element={<StudentResults />} />
                 <Route path="results/:resultID" element={<StudentResultDetail />} />
@@ -174,6 +198,7 @@ export function App() {
           </SessionWatcher>
         </BrowserRouter>
       </QueryClientProvider>
-    </Provider>);
+    </Provider>
+    </BrandingProvider>);
 
 }
