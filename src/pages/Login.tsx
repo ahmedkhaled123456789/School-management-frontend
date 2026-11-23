@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { GraduationCapIcon, ShieldCheckIcon, UsersIcon } from 'lucide-react';
+import { GraduationCapIcon, HeartHandshakeIcon, ShieldCheckIcon, UsersIcon } from 'lucide-react';
 import { ApiError } from '../api/client';
 import { Button } from '../components/ui/Button';
 import { Input } from '../components/ui/Input';
@@ -33,6 +33,12 @@ const ROLES: Array<{value: Role;label: string;icon: typeof ShieldCheckIcon;blurb
   label: 'Student',
   icon: GraduationCapIcon,
   blurb: 'Sit your exams and review published results.'
+},
+{
+  value: 'parent',
+  label: 'Parent',
+  icon: HeartHandshakeIcon,
+  blurb: "Follow your children's classes and published results."
 }];
 
 
@@ -119,7 +125,7 @@ export function LoginPage() {
           <div
             role="tablist"
             aria-label="Select account type"
-            className="mt-5 grid grid-cols-3 gap-1 rounded-xl bg-ink-100 p-1">
+            className="mt-5 grid grid-cols-2 gap-1 rounded-xl bg-ink-100 p-1 sm:grid-cols-4">
             
             {ROLES.map((item) => {
               const isActive = item.value === role;

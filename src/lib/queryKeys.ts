@@ -45,6 +45,15 @@ export const queryKeys = {
 
   parents: ['parents'] as const,
   parent: (id: string) => ['parent', id] as const,
+
+  // parent portal (signed-in parent)
+  parentProfile: ['parentProfile'] as const,
+  myChildrenRoot: ['myChildren'] as const,
+  myChildren: (params: ListParams) => ['myChildren', params] as const,
+  myChild: (studentId: string) => ['myChild', studentId] as const,
+  myChildResults: (studentId: string, params: ListParams) =>
+  ['myChildResults', studentId, params] as const,
+
   feesGroups: ['feesGroups'] as const,
   feesGroup: (id: string) => ['feesGroup', id] as const,
   expenses: ['expenses'] as const,

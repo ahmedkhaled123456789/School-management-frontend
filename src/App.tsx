@@ -38,6 +38,10 @@ import { StudentExams } from './pages/student/Exams';
 import { StudentExamRunner } from './pages/student/ExamRunner';
 import { StudentResults } from './pages/student/Results';
 import { StudentResultDetail } from './pages/student/ResultDetail';
+import { ParentLayout } from './components/layout/ParentLayout';
+import { ParentDashboard } from './pages/parent/Dashboard';
+import { ParentChildDetail } from './pages/parent/ChildDetail';
+import { ParentProfilePage } from './pages/parent/Profile';
 
 export function App() {
   return (
@@ -100,6 +104,15 @@ export function App() {
                 <Route path="exams" element={<StudentExams />} />
                 <Route path="results" element={<StudentResults />} />
                 <Route path="results/:resultID" element={<StudentResultDetail />} />
+              </Route>
+            </Route>
+
+            {/* Parent */}
+            <Route element={<ProtectedRoute allow="parent" />}>
+              <Route path="/parent" element={<ParentLayout />}>
+                <Route index element={<ParentDashboard />} />
+                <Route path="children/:studentId" element={<ParentChildDetail />} />
+                <Route path="profile" element={<ParentProfilePage />} />
               </Route>
             </Route>
 

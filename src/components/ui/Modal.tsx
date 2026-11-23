@@ -79,7 +79,7 @@ export function Modal({
               type="button"
               onClick={onClose}
               aria-label="Close dialog"
-              className="-mr-1 rounded-lg p-1.5 text-ink-400 transition-colors hover:bg-ink-100 hover:text-ink-700">
+              className="-me-1 rounded-lg p-1.5 text-ink-400 transition-colors hover:bg-ink-100 hover:text-ink-700">
               
                 <XIcon className="h-4 w-4" aria-hidden="true" />
               </button>

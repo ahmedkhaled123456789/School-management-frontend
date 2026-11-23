@@ -5,7 +5,8 @@ import type { Role } from '../types/common';
 const LOGIN_PATHS: Record<Role, string> = {
   admin: '/admins/login',
   teacher: '/teachers/login',
-  student: '/students/login'
+  student: '/students/login',
+  parent: '/parents/login'
 };
 
 interface RawLogin {
@@ -63,9 +64,10 @@ export async function login(role: Role, payload: LoginPayload): Promise<LoginRes
   };
 }
 
-/** Fetches the signed-in principal for teacher/student. */
+/** Fetches the signed-in principal for teacher/student/parent. */
 export async function fetchProfile(role: Role): Promise<Record<string, unknown> | null> {
   if (role === 'teacher') return unwrap(await request('/teachers/profile'));
   if (role === 'student') return unwrap(await request('/students/profile'));
+  if (role === 'parent') return unwrap(await request('/parents/profile'));
   return null;
 }

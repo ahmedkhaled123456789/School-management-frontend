@@ -1,4 +1,4 @@
-export type Role = 'admin' | 'teacher' | 'student';
+export type Role = 'admin' | 'teacher' | 'student' | 'parent';
 
 export interface ApiEnvelope<T> {
   status?: string;

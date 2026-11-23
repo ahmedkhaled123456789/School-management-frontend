@@ -23,7 +23,7 @@ export function Breadcrumbs({ items }: {items: Crumb[];}) {
               </span>
           }
             {index < items.length - 1 &&
-          <ChevronRightIcon className="h-3 w-3 text-ink-300" aria-hidden="true" />
+          <ChevronRightIcon className="h-3 w-3 text-ink-300 rtl:rotate-180" aria-hidden="true" />
           }
           </li>
         )}

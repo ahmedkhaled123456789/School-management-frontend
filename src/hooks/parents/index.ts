@@ -1,7 +1,14 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { errorMessage } from '../../api/client';
-import { createParent, getParent, listParents, updateParent } from '../../api/parents';
+import {
+  createParent,
+  getParent,
+  linkStudentToParent,
+  listParents,
+  unlinkStudentFromParent,
+  updateParent } from
+'../../api/parents';
 import { queryKeys } from '../../lib/queryKeys';
 import type { CreateParentPayload, UpdateParentPayload } from '../../types/parent';
 
@@ -16,6 +23,37 @@ export function useParent(id?: string) {
 export function useCreateParent() {
   const queryClient = useQueryClient();
   return useMutation({ mutationFn: (payload: CreateParentPayload) => createParent(payload), onSuccess: () => { toast.success('Parent created.'); queryClient.invalidateQueries({ queryKey: queryKeys.parents }); }, onError: (error) => toast.error(errorMessage(error)) });
+}
+
+interface LinkVariables {
+  parentId: string;
+  studentId: string;
+}
+
+/** Link / unlink change both documents, so refresh both sides of the relation. */
+function useParentStudentLinkMutation(action: 'link' | 'unlink') {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ parentId, studentId }: LinkVariables) =>
+    action === 'link' ?
+    linkStudentToParent(parentId, studentId) :
+    unlinkStudentFromParent(parentId, studentId),
+    onSuccess: (_data, { parentId, studentId }) => {
+      toast.success(action === 'link' ? 'Student linked to parent.' : 'Student unlinked from parent.');
+      queryClient.invalidateQueries({ queryKey: queryKeys.parents });
+      queryClient.invalidateQueries({ queryKey: queryKeys.parent(parentId) });
+      queryClient.invalidateQueries({ queryKey: queryKeys.student(studentId) });
+    },
+    onError: (error) => toast.error(errorMessage(error))
+  });
+}
+
+export function useLinkStudentToParent() {
+  return useParentStudentLinkMutation('link');
+}
+
+export function useUnlinkStudentFromParent() {
+  return useParentStudentLinkMutation('unlink');
 }
 
 export function useUpdateParent() {

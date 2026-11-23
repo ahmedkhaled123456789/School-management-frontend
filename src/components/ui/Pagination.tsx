@@ -46,7 +46,7 @@ export function Pagination({
           size="sm"
           disabled={!hasPrevious || isFetching}
           onClick={() => onPageChange(Math.max(1, page - 1))}
-          icon={<ChevronLeftIcon className="h-3.5 w-3.5" aria-hidden="true" />}>
+          icon={<ChevronLeftIcon className="h-3.5 w-3.5 rtl:rotate-180" aria-hidden="true" />}>
           
           Previous
         </Button>
@@ -58,7 +58,7 @@ export function Pagination({
           onClick={() => onPageChange(page + 1)}>
           
           Next
-          <ChevronRightIcon className="h-3.5 w-3.5" aria-hidden="true" />
+          <ChevronRightIcon className="h-3.5 w-3.5 rtl:rotate-180" aria-hidden="true" />
         </Button>
       </div>
     </nav>);

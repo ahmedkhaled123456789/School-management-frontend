@@ -17,6 +17,7 @@ export function useUpdateMyImage() {
       queryClient.invalidateQueries({ queryKey: queryKeys.adminProfile });
       queryClient.invalidateQueries({ queryKey: queryKeys.teacherProfile });
       queryClient.invalidateQueries({ queryKey: queryKeys.studentProfile });
+      queryClient.invalidateQueries({ queryKey: queryKeys.parentProfile });
     },
     onError: (error) => toast.error(errorMessage(error))
   });

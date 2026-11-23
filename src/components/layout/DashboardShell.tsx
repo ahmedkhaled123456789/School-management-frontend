@@ -38,7 +38,7 @@ function NavList({ items, onNavigate }: {items: NavItem[];onNavigate?: () => voi
               {isActive &&
           <motion.span
             layoutId="nav-active"
-            className="absolute left-0 top-1/2 h-6 w-1 -translate-y-1/2 rounded-r-full bg-accent-300"
+            className="absolute start-0 top-1/2 h-6 w-1 -translate-y-1/2 rounded-e-full bg-accent-300"
             transition={{ type: 'spring', stiffness: 500, damping: 38 }} />
 
           }
@@ -114,7 +114,7 @@ export function DashboardShell({ role, navItems }: DashboardShellProps) {
             className="relative flex h-full w-72 flex-col bg-primary-800"
             aria-label="Navigation menu">
             
-              <div className="flex items-center justify-between pr-3">
+              <div className="flex items-center justify-between pe-3">
                 <Brand />
                 <button
                 type="button"
@@ -162,7 +162,7 @@ export function DashboardShell({ role, navItems }: DashboardShellProps) {
             </p>
           </div>
           <div className="flex items-center gap-3">
-            <div className="hidden text-right sm:block">
+            <div className="hidden text-end sm:block">
               <p className="max-w-[180px] truncate text-[13px] font-bold text-ink-900">
                 {displayName}
               </p>

@@ -16,7 +16,7 @@ export function Field({ id, label, error, hint, required, className, children }:
     <div className={cn('space-y-1.5', className)}>
       <label htmlFor={id} className="block text-[13px] font-semibold text-ink-700">
         {label}
-        {required && <span className="ml-1 text-danger-500">*</span>}
+        {required && <span className="ms-1 text-danger-500">*</span>}
       </label>
       {children}
       {error ?

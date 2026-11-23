@@ -56,8 +56,14 @@ export const STUDENT_NAV: NavItem[] = [
 { label: 'Exam Results', to: '/student/results', icon: AwardIcon }];
 
 
+export const PARENT_NAV: NavItem[] = [
+{ label: 'My Children', to: '/parent', icon: LayoutDashboardIcon, end: true },
+{ label: 'My Profile', to: '/parent/profile', icon: UserCogIcon }];
+
+
 export const ROLE_LABEL: Record<Role, string> = {
   admin: 'Administration',
   teacher: 'Teaching Staff',
-  student: 'Student Portal'
+  student: 'Student Portal',
+  parent: 'Parent Portal'
 };

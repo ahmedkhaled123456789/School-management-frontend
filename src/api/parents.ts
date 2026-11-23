@@ -17,3 +17,17 @@ export async function createParent(payload: CreateParentPayload): Promise<Parent
 export async function updateParent(id: string, payload: UpdateParentPayload): Promise<Parent> {
   return unwrap<Parent>(await request(`/parents/${id}/admin`, { method: 'PUT', body: payload }));
 }
+
+/** POST /parents/:parentId/students/:studentId — admin, idempotent. */
+export async function linkStudentToParent(parentId: string, studentId: string): Promise<Parent> {
+  return unwrap<Parent>(
+    await request(`/parents/${parentId}/students/${studentId}`, { method: 'POST' })
+  );
+}
+
+/** DELETE /parents/:parentId/students/:studentId — admin, idempotent. */
+export async function unlinkStudentFromParent(parentId: string, studentId: string): Promise<Parent> {
+  return unwrap<Parent>(
+    await request(`/parents/${parentId}/students/${studentId}`, { method: 'DELETE' })
+  );
+}

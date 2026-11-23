@@ -37,7 +37,7 @@ export function SearchInput({
         {label}
       </label>
       <SearchIcon
-        className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-ink-400"
+        className="pointer-events-none absolute start-3 top-1/2 h-4 w-4 -translate-y-1/2 text-ink-400"
         aria-hidden="true" />
       
       <input
@@ -46,14 +46,14 @@ export function SearchInput({
         value={draft}
         placeholder={placeholder}
         onChange={(event) => setDraft(event.target.value)}
-        className="h-10 w-full rounded-lg border border-ink-200 bg-white pl-9 pr-9 text-sm text-ink-900 placeholder:text-ink-400 transition-colors hover:border-ink-300 focus:border-primary-500" />
+        className="h-10 w-full rounded-lg border border-ink-200 bg-white ps-9 pe-9 text-sm text-ink-900 placeholder:text-ink-400 transition-colors hover:border-ink-300 focus:border-primary-500" />
       
       {draft &&
       <button
         type="button"
         onClick={() => setDraft('')}
         aria-label="Clear search"
-        className="absolute right-2.5 top-1/2 -translate-y-1/2 rounded p-1 text-ink-400 hover:bg-ink-100 hover:text-ink-600">
+        className="absolute end-2.5 top-1/2 -translate-y-1/2 rounded p-1 text-ink-400 hover:bg-ink-100 hover:text-ink-600">
         
           <XIcon className="h-3.5 w-3.5" aria-hidden="true" />
         </button>

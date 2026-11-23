@@ -4,6 +4,7 @@ import { useStudents } from '../../hooks/students';
 import type { Parent } from '../../types/parent';
 import { relationLabel } from '../../utils/format';
 import { Avatar } from '../../components/ui/Avatar';
+import { ParentStudentsManager } from '../../components/admin/ParentStudentLinks';
 
 function studentsLabel(value: Parent['student']): string {
   if (!Array.isArray(value) || value.length === 0) return '—';
@@ -38,7 +39,7 @@ export function AdminParents() {
       { name: 'name', label: 'Full name', type: 'text', required: true },
       { name: 'email', label: 'Email address', type: 'text', required: true },
       { name: 'password', label: 'Password', type: 'password', requiredOnCreate: true, hint: 'Required when registering a parent.', },
-      { name: 'student', label: 'Student(s)', type: 'select', requiredOnCreate: true, options: studentOptions, hint: 'Hold Ctrl or Command to select multiple students.' },
+      { name: 'student', label: 'Student(s)', type: 'select', requiredOnCreate: true, options: studentOptions, hint: 'More students can be linked later from the parent details (View).' },
       { name: 'phone', label: 'Phone', type: 'text' },
       { name: 'address', label: 'Address', type: 'text' },
       { name: 'occupation', label: 'Occupation', type: 'text' },
@@ -47,6 +48,9 @@ export function AdminParents() {
     toFormValues={(row) => ({ name: row.name ?? '', email: row.email ?? '', phone: row.phone ?? '', address: row.address ?? '', occupation: row.occupation ?? '', religion: row.religion ?? '', student: Array.isArray(row.student) ? row.student.map((item) => typeof item === 'string' ? item : item._id ?? '').filter(Boolean).join(',') : '' })}
     onCreate={(values) => create.mutateAsync({ name: values.name.trim(), email: values.email.trim(), password: values.password, student: values.student ? values.student.split(',').filter(Boolean) : [], phone: values.phone.trim() || undefined, address: values.address.trim() || undefined, occupation: values.occupation.trim() || undefined, religion: values.religion.trim() || undefined })}
     onUpdate={(row, values) => update.mutateAsync({ id: row._id, payload: { name: values.name.trim() || undefined, email: values.email.trim() || undefined, password: values.password || undefined, phone: values.phone.trim() || undefined, address: values.address.trim() || undefined, occupation: values.occupation.trim() || undefined } })}
-    renderDetails={(row) => <dl className="space-y-3 text-sm">{[['Name', row.name], ['Email', row.email], ['Phone', row.phone], ['Address', row.address], ['Occupation', row.occupation], ['Religion', row.religion], ['Student(s)', studentsLabel(row.student)]].map(([label, value]) => <div key={label}><dt className="text-[12px] font-bold uppercase tracking-wider text-ink-500">{label}</dt><dd className="mt-1 text-ink-700">{String(value || '—')}</dd></div>)}</dl>}
+    renderDetails={(row) => <>
+      <dl className="space-y-3 text-sm">{[['Name', row.name], ['Email', row.email], ['Phone', row.phone], ['Address', row.address], ['Occupation', row.occupation], ['Religion', row.religion]].map(([label, value]) => <div key={label}><dt className="text-[12px] font-bold uppercase tracking-wider text-ink-500">{label}</dt><dd dir="auto" className="mt-1 text-ink-700">{String(value || '—')}</dd></div>)}</dl>
+      <ParentStudentsManager parentId={row._id} />
+    </>}
   />;
 }

@@ -14,6 +14,7 @@ import { usePrograms } from '../../hooks/programs';
 import { useStudent, useUpdateStudent } from '../../hooks/students';
 import { formatDate, relationLabel } from '../../utils/format';
 import { AvatarUploader } from '../../components/ui/AvatarUploader';
+import { StudentParentsCard } from '../../components/admin/ParentStudentLinks';
 import { emailField, requiredField, type Errors } from '../../utils/validation';
 
 interface EditValues {
@@ -324,6 +325,14 @@ export function AdminStudentDetail() {
             }
           </CardBody>
         </Card>
+      </div>
+
+      <div className="mt-5">
+        <StudentParentsCard
+          studentId={studentID}
+          parents={student?.parents}
+          isLoading={query.isLoading} />
+
       </div>
     </>);
 
