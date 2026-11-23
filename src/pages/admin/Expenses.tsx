@@ -1,14 +1,63 @@
 import { CrudResourcePage } from '../../components/admin/CrudResourcePage';
-import { useCreateExpense, useDeleteExpense, useExpenses, useUpdateExpense } from '../../hooks/finance';
+import { useCreateExpense, useCurrency, useDeleteExpense, useExpenses, useUpdateExpense } from '../../hooks/finance';
 import type { Expense } from '../../types/finance';
+import { formatDate } from '../../utils/format';
+import { formatMoney, parseAmount, todayInput } from '../../utils/money';
 
+const CATEGORY_HINT = 'e.g. Utilities, Maintenance, Supplies, Salaries, Marketing';
+
+/** Fixed: the form now sends the fields the backend expects (expensesType, date). */
 export function AdminExpenses() {
-  const query = useExpenses(); const create = useCreateExpense(); const update = useUpdateExpense(); const remove = useDeleteExpense();
-  return <CrudResourcePage<Expense> title="Expenses" description="Record and maintain school expenses." entityName="Expense" query={query} rowKey={(row) => row._id} searchAccessor={(row) => Object.values(row).filter((value) => typeof value === 'string' || typeof value === 'number').join(' ')} isSaving={create.isPending || update.isPending} isDeleting={remove.isPending} emptyDescription="Record your first expense to keep school spending organized." columns={[
-    { key: 'name', header: 'Name', render: (row) => <span className="font-semibold text-ink-900">{String(row.name ?? row.title ?? '—')}</span> },
-    { key: 'amount', header: 'Amount', render: (row) => String(row.amount ?? '—') },
-    { key: 'category', header: 'Category', render: (row) => String(row.category ?? '—') },
-    { key: 'date', header: 'Date', render: (row) => String(row.date ?? row.createdAt ?? '—') },
-    { key: 'description', header: 'Description', render: (row) => String(row.description ?? '—') }
-  ]} fields={[{ name: 'name', label: 'Name', type: 'text', required: true }, { name: 'amount', label: 'Amount', type: 'text' }, { name: 'category', label: 'Category', type: 'text' }, { name: 'date', label: 'Date', type: 'text' }, { name: 'description', label: 'Description', type: 'textarea' }]} toFormValues={(row) => ({ name: String(row.name ?? row.title ?? ''), amount: String(row.amount ?? ''), category: String(row.category ?? ''), date: String(row.date ?? ''), description: String(row.description ?? '') })} onCreate={(values) => create.mutateAsync(Object.fromEntries(Object.entries(values).filter(([, value]) => value.trim() !== '')))} onUpdate={(row, values) => update.mutateAsync({ id: row._id, payload: Object.fromEntries(Object.entries(values).filter(([, value]) => value.trim() !== '')) })} onDelete={(row) => remove.mutateAsync(row._id)} renderDetails={(row) => <dl className="space-y-3 text-sm">{Object.entries(row).filter(([key]) => key !== '_id').map(([key, value]) => <div key={key}><dt className="font-bold capitalize text-ink-500">{key.replace(/[A-Z]/g, (letter) => ` ${letter.toLowerCase()}`)}</dt><dd className="mt-1 text-ink-700">{String(value ?? '—')}</dd></div>)}</dl>} />;
+  const query = useExpenses();
+  const create = useCreateExpense();
+  const update = useUpdateExpense();
+  const remove = useDeleteExpense();
+  const currency = useCurrency();
+
+  const toPayload = (values: Record<string, string>) => ({
+    name: values.name.trim(),
+    expensesType: values.expensesType.trim(),
+    amount: parseAmount(values.amount) ?? 0,
+    date: values.date || todayInput(),
+    description: values.description.trim(),
+    phone: values.phone.trim() || undefined
+  });
+
+  return <CrudResourcePage<Expense>
+    title="Expenses"
+    description="Money the school spends, by category."
+    entityName="Expense"
+    query={query}
+    rowKey={(row) => row._id}
+    searchAccessor={(row) => `${row.name} ${row.expensesType} ${row.description ?? ''}`}
+    isSaving={create.isPending || update.isPending}
+    isDeleting={remove.isPending}
+    emptyDescription="Record your first expense to keep school spending organized."
+    columns={[
+    { key: 'name', header: 'Name', render: (row) => <span dir="auto" className="font-semibold text-ink-900">{row.name}</span> },
+    { key: 'category', header: 'Category', render: (row) => <span dir="auto">{row.expensesType || '—'}</span> },
+    { key: 'amount', header: 'Amount', align: 'right', render: (row) => <span className="font-mono">{formatMoney(row.amount, currency)}</span> },
+    { key: 'date', header: 'Date', render: (row) => formatDate(row.date) },
+    { key: 'description', header: 'Description', render: (row) => <span dir="auto">{row.description || '—'}</span> }]
+    }
+    fields={[
+    { name: 'name', label: 'Name', type: 'text', required: true, placeholder: 'e.g. November electricity' },
+    { name: 'expensesType', label: 'Category', type: 'text', required: true, hint: CATEGORY_HINT },
+    { name: 'amount', label: `Amount (${currency})`, type: 'number', required: true, validate: (value) => parseAmount(value) === null ? 'Enter an amount with up to 2 decimals.' : undefined },
+    { name: 'date', label: 'Date (yyyy-mm-dd)', type: 'text', placeholder: todayInput(), hint: 'Leave empty for today.', validate: (value) => !value || /^\d{4}-\d{2}-\d{2}$/.test(value) ? undefined : 'Use yyyy-mm-dd.' },
+    { name: 'phone', label: 'Payee phone', type: 'text' },
+    { name: 'description', label: 'Description', type: 'textarea' }]
+    }
+    toFormValues={(row) => ({
+      name: row.name ?? '',
+      expensesType: row.expensesType ?? '',
+      amount: String(row.amount ?? ''),
+      date: (row.date ?? '').slice(0, 10),
+      phone: row.phone ?? '',
+      description: row.description ?? ''
+    })}
+    onCreate={(values) => create.mutateAsync(toPayload(values))}
+    onUpdate={(row, values) => update.mutateAsync({ id: row._id, payload: toPayload(values) })}
+    onDelete={(row) => remove.mutateAsync(row._id)} />;
+
 }

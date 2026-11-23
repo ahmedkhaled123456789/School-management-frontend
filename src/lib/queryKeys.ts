@@ -58,8 +58,18 @@ export const queryKeys = {
   myChildResults: (studentId: string, params: ListParams) =>
   ['myChildResults', studentId, params] as const,
 
-  feesGroups: ['feesGroups'] as const,
-  feesGroup: (id: string) => ['feesGroup', id] as const,
+  // finance: everything below starts with 'finance' so one invalidation refreshes it all
+  financeRoot: ['finance'] as const,
+  feeItems: ['finance', 'feeItems'] as const,
+  feeStructures: (params: ListParams) => ['finance', 'feeStructures', params] as const,
+  discounts: ['finance', 'discounts'] as const,
+  invoices: (params: ListParams) => ['finance', 'invoices', params] as const,
+  invoice: (id: string) => ['finance', 'invoice', id] as const,
+  payments: (params: ListParams) => ['finance', 'payments', params] as const,
+  payment: (id: string) => ['finance', 'payment', id] as const,
+  outstanding: (params: ListParams) => ['finance', 'outstanding', params] as const,
+  collections: (params: ListParams) => ['finance', 'collections', params] as const,
+  childInvoices: (studentId: string) => ['finance', 'childInvoices', studentId] as const,
   expenses: ['expenses'] as const,
   expense: (id: string) => ['expense', id] as const
 };

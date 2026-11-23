@@ -14,6 +14,7 @@ import { childClassLabel, resultGradeLabel } from '../../utils/parentPortal';
 import { useMyChild, useMyChildResults } from '../../hooks/parentPortal';
 import type { ChildResult } from '../../types/parentPortal';
 import { formatDate, relationLabel } from '../../utils/format';
+import { ChildFees } from '../../components/parent/ChildFees';
 
 const PAGE_SIZE = 10;
 
@@ -181,6 +182,8 @@ export function ParentChildDetail() {
           }
         </Card>
       </div>
+
+      <ChildFees studentId={studentId} />
     </>);
 
 }

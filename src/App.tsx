@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { Provider } from 'react-redux';
 import { Toaster } from 'sonner';
@@ -29,8 +29,15 @@ import { AdminAcademicTerms } from './pages/admin/AcademicTerms';
 import { AdminYearGroups } from './pages/admin/YearGroups';
 import { AdminExamResults } from './pages/admin/ExamResults';
 import { AdminParents } from './pages/admin/Parents';
-import { AdminFeesGroups } from './pages/admin/FeesGroups';
 import { AdminExpenses } from './pages/admin/Expenses';
+import { AdminInvoices } from './pages/admin/finance/Invoices';
+import { AdminInvoiceDetail } from './pages/admin/finance/InvoiceDetail';
+import { AdminPayments } from './pages/admin/finance/Payments';
+import { AdminFinanceReports } from './pages/admin/finance/Reports';
+import { AdminFeeStructures } from './pages/admin/finance/FeeStructures';
+import { AdminFeeItems } from './pages/admin/finance/FeeItems';
+import { AdminDiscounts } from './pages/admin/finance/Discounts';
+import { AdminInvoicePrint, AdminReceiptPrint, ParentInvoicePrint, ParentReceiptPrint } from './pages/print/FinancePrint';
 import { TeacherDashboard } from './pages/teacher/Dashboard';
 import { TeacherExams } from './pages/teacher/Exams';
 import { TeacherExamBuilder } from './pages/teacher/ExamBuilder';
@@ -65,6 +72,14 @@ export function App() {
             <Route path="/login" element={<LoginPage />} />
             <Route path="/login/:role" element={<LoginPage />} />
 
+            {/* Finance print pages (admin portal, finance permission), no dashboard chrome */}
+            <Route element={<ProtectedRoute allow="admin" />}>
+              <Route element={<RequirePermission permission={PERMISSIONS.FINANCE_MANAGE} />}>
+                <Route path="/admin/finance/invoices/:invoiceId/print" element={<AdminInvoicePrint />} />
+                <Route path="/admin/finance/payments/:paymentId/print" element={<AdminReceiptPrint />} />
+              </Route>
+            </Route>
+
             {/* Admin */}
             <Route element={<ProtectedRoute allow="admin" />}>
               <Route path="/admin" element={<AdminLayout />}>
@@ -91,8 +106,16 @@ export function App() {
                   <Route path="exam-results" element={<AdminExamResults />} />
                 </Route>
                 <Route element={<RequirePermission permission={PERMISSIONS.FINANCE_MANAGE} />}>
-                  <Route path="fees-groups" element={<AdminFeesGroups />} />
                   <Route path="expenses" element={<AdminExpenses />} />
+                  <Route path="finance/invoices" element={<AdminInvoices />} />
+                  <Route path="finance/invoices/:invoiceId" element={<AdminInvoiceDetail />} />
+                  <Route path="finance/payments" element={<AdminPayments />} />
+                  <Route path="finance/reports" element={<AdminFinanceReports />} />
+                  <Route path="finance/fee-structures" element={<AdminFeeStructures />} />
+                  <Route path="finance/fee-items" element={<AdminFeeItems />} />
+                  <Route path="finance/discounts" element={<AdminDiscounts />} />
+                  {/* old link */}
+                  <Route path="fees-groups" element={<Navigate to="/admin/finance/fee-items" replace />} />
                 </Route>
                 <Route element={<RequirePermission permission={PERMISSIONS.ADMINS_MANAGE} />}>
                   <Route path="administrators" element={<AdminAdministrators />} />
@@ -141,6 +164,9 @@ export function App() {
                 <Route path="children/:studentId" element={<ParentChildDetail />} />
                 <Route path="profile" element={<ParentProfilePage />} />
               </Route>
+              {/* printable documents: outside the dashboard chrome */}
+              <Route path="/parent/children/:studentId/invoices/:invoiceId/print" element={<ParentInvoicePrint />} />
+              <Route path="/parent/children/:studentId/receipts/:paymentId/print" element={<ParentReceiptPrint />} />
             </Route>
 
             <Route path="*" element={<NotFoundPage />} />

@@ -1,7 +1,11 @@
 import type { LucideIcon } from 'lucide-react';
 import {
   AwardIcon,
+  BanknoteIcon,
   BookOpenIcon,
+  ChartColumnIcon,
+  FileTextIcon,
+  PercentIcon,
   BriefcaseIcon,
   CalendarRangeIcon,
   ClipboardListIcon,
@@ -104,7 +108,12 @@ export const ADMIN_NAV: NavEntry[] = [
   label: 'Finance',
   icon: WalletIcon,
   children: [
-  { label: 'Fees Groups', to: '/admin/fees-groups', icon: WalletCardsIcon, permission: P.FINANCE_MANAGE },
+  { label: 'Invoices', to: '/admin/finance/invoices', icon: FileTextIcon, permission: P.FINANCE_MANAGE },
+  { label: 'Payments', to: '/admin/finance/payments', icon: BanknoteIcon, permission: P.FINANCE_MANAGE },
+  { label: 'Reports', to: '/admin/finance/reports', icon: ChartColumnIcon, permission: P.FINANCE_MANAGE },
+  { label: 'Fee Structures', to: '/admin/finance/fee-structures', icon: LayersIcon, permission: P.FINANCE_MANAGE },
+  { label: 'Fee Items', to: '/admin/finance/fee-items', icon: WalletCardsIcon, permission: P.FINANCE_MANAGE },
+  { label: 'Discounts', to: '/admin/finance/discounts', icon: PercentIcon, permission: P.FINANCE_MANAGE },
   { label: 'Expenses', to: '/admin/expenses', icon: ReceiptTextIcon, permission: P.FINANCE_MANAGE }]
 
 },
