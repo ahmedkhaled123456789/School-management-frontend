@@ -108,3 +108,5 @@ table {
 .sb-item { color: var(--sb-muted); }
 .sb-item:hover { background: var(--sb-hover); color: var(--sb-text); }
 .sb-item-active, .sb-item-active:hover { background: var(--sb-active); color: var(--sb-active-text); }
+/* "Soon" pill on planned modules: a quiet outline that works on every sidebar style */
+.sb-soon { border: 1px solid var(--sb-border); color: var(--sb-label); }

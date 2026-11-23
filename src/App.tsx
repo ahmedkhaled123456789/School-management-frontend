@@ -66,6 +66,18 @@ import { ParentLayout } from './components/layout/ParentLayout';
 import { ParentDashboard } from './pages/parent/Dashboard';
 import { ParentChildDetail } from './pages/parent/ChildDetail';
 import { ParentProfilePage } from './pages/parent/Profile';
+import { ModulePlaceholder } from './pages/ModulePlaceholder';
+import { ADMIN_NAV, PARENT_NAV, STUDENT_NAV, TEACHER_NAV, plannedRoutes, type NavEntry } from './components/layout/navigation';
+
+/** Placeholder pages for the planned modules listed in a portal's sidebar. */
+function plannedModuleRoutes(nav: NavEntry[]) {
+  return plannedRoutes(nav).map((item) => {
+    const page = <Route key={item.path} path={item.path} element={<ModulePlaceholder module={item.module!} page={item.label} />} />;
+    return item.permission ?
+    <Route key={item.path} element={<RequirePermission permission={item.permission} />}>{page}</Route> :
+    page;
+  });
+}
 
 export function App() {
   return (
@@ -150,6 +162,7 @@ export function App() {
                   <Route path="settings" element={<AdminSettings />} />
                   <Route path="branding" element={<AdminBranding />} />
                 </Route>
+                {plannedModuleRoutes(ADMIN_NAV)}
               </Route>
             </Route>
 
@@ -164,6 +177,7 @@ export function App() {
                 <Route path="timetable" element={<TeacherTimetable />} />
                 <Route path="sections" element={<TeacherMySections />} />
                 <Route path="profile" element={<TeacherProfile />} />
+                {plannedModuleRoutes(TEACHER_NAV)}
               </Route>
             </Route>
 
@@ -178,6 +192,7 @@ export function App() {
                 <Route path="exams" element={<StudentExams />} />
                 <Route path="results" element={<StudentResults />} />
                 <Route path="results/:resultID" element={<StudentResultDetail />} />
+                {plannedModuleRoutes(STUDENT_NAV)}
               </Route>
             </Route>
 
@@ -187,6 +202,7 @@ export function App() {
                 <Route index element={<ParentDashboard />} />
                 <Route path="children/:studentId" element={<ParentChildDetail />} />
                 <Route path="profile" element={<ParentProfilePage />} />
+                {plannedModuleRoutes(PARENT_NAV)}
               </Route>
               {/* printable documents: outside the dashboard chrome */}
               <Route path="/parent/children/:studentId/invoices/:invoiceId/print" element={<ParentInvoicePrint />} />

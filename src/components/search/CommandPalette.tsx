@@ -133,11 +133,11 @@ export function CommandPalette({ open, onClose, role, navItems }: CommandPalette
     const out: Array<{name: string;items: Result[];loading?: boolean;}> = [];
     if (!needle) {
       if (recent.length) out.push({ name: 'Recent', items: recent });
-      out.push({ name: 'Go to', items: pages.slice(0, 8).map((p) => ({ id: `page-${p.to}`, group: 'Pages', title: p.label, subtitle: p.to, href: p.to, icon: p.icon })) });
+      out.push({ name: 'Go to', items: pages.slice(0, 8).map((p) => ({ id: `page-${p.to}`, group: 'Pages', title: p.label, subtitle: p.module ? `Coming soon · ${p.to}` : p.to, href: p.to, icon: p.icon })) });
       return out;
     }
     const pageHits = pages.filter((p) => p.label.toLowerCase().includes(needle)).slice(0, 6);
-    if (pageHits.length) out.push({ name: 'Pages', items: pageHits.map((p) => ({ id: `page-${p.to}`, group: 'Pages', title: p.label, subtitle: p.to, href: p.to, icon: p.icon })) });
+    if (pageHits.length) out.push({ name: 'Pages', items: pageHits.map((p) => ({ id: `page-${p.to}`, group: 'Pages', title: p.label, subtitle: p.module ? `Coming soon · ${p.to}` : p.to, href: p.to, icon: p.icon })) });
     if (needle.length < 2) return out;
     if (allow.students) {
       out.push({

@@ -95,7 +95,10 @@ function NavLinkItem({
 
         }
           <item.icon className={cn('shrink-0', nested ? 'h-3.5 w-3.5' : 'h-4 w-4')} aria-hidden="true" />
-          <span className="truncate">{item.label}</span>
+          <span className="min-w-0 flex-1 truncate">{item.label}</span>
+          {item.module &&
+        <span className="sb-soon shrink-0 rounded-full px-1.5 py-px text-[9.5px] font-bold uppercase tracking-wide">Soon</span>
+        }
         </>
       }
     </NavLink>);
