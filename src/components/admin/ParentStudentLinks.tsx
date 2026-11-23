@@ -35,7 +35,7 @@ function LinkedList({
 
 
 
-}: {items: LinkedItem[];emptyText: string;pendingId?: string;onUnlink: (id: string) => void;}) {
+}: {items: LinkedItem[];emptyText: string;pendingId?: string;onUnlink?: (id: string) => void;}) {
   const [confirmId, setConfirmId] = useState<string | null>(null);
 
   if (items.length === 0) {
@@ -57,7 +57,7 @@ function LinkedList({
           }
             {item.subtitle && <p className="truncate text-[12px] text-ink-500">{item.subtitle}</p>}
           </div>
-          {confirmId === item.id ?
+          {!onUnlink ? null : confirmId === item.id ?
         <div className="flex items-center gap-1.5">
               <Button size="sm" variant="secondary" onClick={() => setConfirmId(null)}>
                 Cancel
@@ -151,12 +151,14 @@ const idOf = (value: string | {_id?: string;}) => typeof value === 'string' ? va
 export function StudentParentsCard({
   studentId,
   parents,
-  isLoading
+  isLoading,
+  readOnly = false
 
 
 
 
-}: {studentId: string;parents?: Array<string | StudentParentRef>;isLoading?: boolean;}) {
+
+}: {studentId: string;parents?: Array<string | StudentParentRef>;isLoading?: boolean;readOnly?: boolean;}) {
   const allParents = useParents();
   const link = useLinkStudentToParent();
   const unlink = useUnlinkStudentFromParent();
@@ -198,10 +200,10 @@ export function StudentParentsCard({
           }))}
           emptyText="No parent is linked to this student yet."
           pendingId={unlink.isPending ? unlink.variables?.parentId : undefined}
-          onUnlink={(parentId) => unlink.mutate({ parentId, studentId })} />
+          onUnlink={readOnly ? undefined : (parentId) => unlink.mutate({ parentId, studentId })} />
 
         }
-        {allParents.isError ?
+        {readOnly ? null : allParents.isError ?
         <ErrorState error={allParents.error} onRetry={() => allParents.refetch()} className="py-6" /> :
 
         <LinkPicker
@@ -223,7 +225,7 @@ export function StudentParentsCard({
 /* Admin > Parents > View: the parent's children                               */
 /* -------------------------------------------------------------------------- */
 
-export function ParentStudentsManager({ parentId }: {parentId: string;}) {
+export function ParentStudentsManager({ parentId, readOnly = false }: {parentId: string;readOnly?: boolean;}) {
   // fetch the parent itself so the list refreshes after every link / unlink
   const parent = useParent(parentId);
   const [search, setSearch] = useState('');
@@ -271,9 +273,10 @@ export function ParentStudentsManager({ parentId }: {parentId: string;}) {
         }))}
         emptyText="No students linked to this parent yet."
         pendingId={unlink.isPending ? unlink.variables?.studentId : undefined}
-        onUnlink={(studentId) => unlink.mutate({ parentId, studentId })} />
+        onUnlink={readOnly ? undefined : (studentId) => unlink.mutate({ parentId, studentId })} />
 
       }
+      {!readOnly &&
       <LinkPicker
         id={`link-student-${parentId}`}
         label="Link a student"
@@ -283,7 +286,7 @@ export function ParentStudentsManager({ parentId }: {parentId: string;}) {
         isLinking={link.isPending}
         hint="Search students by name."
         onLink={(studentId) => link.mutateAsync({ parentId, studentId })} />
-
+      }
     </section>);
 
 }

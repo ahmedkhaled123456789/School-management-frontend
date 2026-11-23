@@ -5,6 +5,8 @@ import type { Parent } from '../../types/parent';
 import { relationLabel } from '../../utils/format';
 import { Avatar } from '../../components/ui/Avatar';
 import { ParentStudentsManager } from '../../components/admin/ParentStudentLinks';
+import { usePermissions } from '../../hooks/permissions';
+import { PERMISSIONS } from '../../lib/permissions';
 
 function studentsLabel(value: Parent['student']): string {
   if (!Array.isArray(value) || value.length === 0) return '—';
@@ -16,6 +18,7 @@ export function AdminParents() {
   const students = useStudents({ limit: 100 });
   const create = useCreateParent();
   const update = useUpdateParent();
+  const canManage = usePermissions().can(PERMISSIONS.STUDENTS_MANAGE);
   const studentOptions = (students.data?.items ?? []).map((student) => ({ value: student._id, label: `${student.name} (${student.studentId})` }));
 
   return <CrudResourcePage<Parent>
@@ -26,6 +29,7 @@ export function AdminParents() {
     rowKey={(row) => row._id}
     searchAccessor={(row) => `${row.name ?? ''} ${row.email ?? ''} ${row.phone ?? ''} ${studentsLabel(row.student)}`}
     isSaving={create.isPending || update.isPending}
+    readOnly={!canManage}
     emptyDescription="Register a parent account to connect families with students."
     columns={[
       { key: 'name', header: 'Parent name', render: (row) => <span className="flex items-center gap-3 font-semibold text-ink-900"><Avatar image={row.image} name={row.name} size="md" />{row.name || '—'}</span> },
@@ -50,7 +54,7 @@ export function AdminParents() {
     onUpdate={(row, values) => update.mutateAsync({ id: row._id, payload: { name: values.name.trim() || undefined, email: values.email.trim() || undefined, password: values.password || undefined, phone: values.phone.trim() || undefined, address: values.address.trim() || undefined, occupation: values.occupation.trim() || undefined } })}
     renderDetails={(row) => <>
       <dl className="space-y-3 text-sm">{[['Name', row.name], ['Email', row.email], ['Phone', row.phone], ['Address', row.address], ['Occupation', row.occupation], ['Religion', row.religion]].map(([label, value]) => <div key={label}><dt className="text-[12px] font-bold uppercase tracking-wider text-ink-500">{label}</dt><dd dir="auto" className="mt-1 text-ink-700">{String(value || '—')}</dd></div>)}</dl>
-      <ParentStudentsManager parentId={row._id} />
+      <ParentStudentsManager parentId={row._id} readOnly={!canManage} />
     </>}
   />;
 }

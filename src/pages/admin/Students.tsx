@@ -18,6 +18,8 @@ import type { Student } from '../../types/student';
 import { relationLabel } from '../../utils/format';
 import { Avatar } from '../../components/ui/Avatar';
 import { emailField, passwordField, requiredField, type Errors } from '../../utils/validation';
+import { usePermissions } from '../../hooks/permissions';
+import { PERMISSIONS } from '../../lib/permissions';
 
 const LIMIT = 10;
 
@@ -46,6 +48,8 @@ export function AdminStudents() {
   const remove = useDeleteStudent();
   const classLevels = useClassLevels();
   const [pendingDelete, setPendingDelete] = useState<Student | null>(null);
+  // e.g. an accountant can browse students but not change them
+  const canManage = usePermissions().can(PERMISSIONS.STUDENTS_MANAGE);
 
   const items = query.data?.items ?? [];
 
@@ -90,9 +94,11 @@ export function AdminStudents() {
         description="Search the student directory, register new students and manage their academic placement."
         breadcrumbs={[{ label: 'Admin', to: '/admin' }, { label: 'Students' }]}
         actions={
+        canManage ?
         <Button onClick={() => setOpen(true)} icon={<PlusIcon className="h-4 w-4" aria-hidden="true" />}>
             Register student
-          </Button>
+          </Button> :
+        undefined
         } />
       
 
@@ -169,19 +175,23 @@ export function AdminStudents() {
                       View
                     </Button>
                   </Link>
-                  <Link to={`/admin/students/${row._id}?edit=1`}>
-                    <Button variant="ghost" size="sm">
-                      Edit
-                    </Button>
-                  </Link>
-                  <Button
-                variant="ghost"
-                size="sm"
-                className="text-danger-600 hover:bg-danger-50"
-                onClick={() => setPendingDelete(row)}>
-                
-                    Delete
-                  </Button>
+                  {canManage &&
+              <>
+                      <Link to={`/admin/students/${row._id}?edit=1`}>
+                        <Button variant="ghost" size="sm">
+                          Edit
+                        </Button>
+                      </Link>
+                      <Button
+                  variant="ghost"
+                  size="sm"
+                  className="text-danger-600 hover:bg-danger-50"
+                  onClick={() => setPendingDelete(row)}>
+
+                        Delete
+                      </Button>
+                    </>
+              }
                 </div>
 
           }]
@@ -200,7 +210,7 @@ export function AdminStudents() {
           'Register your first student to build the directory.'
           }
           emptyAction={
-          !name ?
+          !name && canManage ?
           <Button onClick={() => setOpen(true)} icon={<PlusIcon className="h-4 w-4" aria-hidden="true" />}>
                 Add student
               </Button> :

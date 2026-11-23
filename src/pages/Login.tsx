@@ -20,7 +20,7 @@ const ROLES: Array<{value: Role;label: string;icon: typeof ShieldCheckIcon;blurb
   value: 'admin',
   label: 'Admin',
   icon: ShieldCheckIcon,
-  blurb: 'Manage students, staff, academics and result publishing.'
+  blurb: 'Administrators and school staff (accountant, registrar, HR) sign in here.'
 },
 {
   value: 'teacher',

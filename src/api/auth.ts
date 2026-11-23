@@ -17,6 +17,9 @@ interface RawLogin {
   accessToken?: string;
   access?: unknown;
   user?: Record<string, unknown>;
+  /** Admin login only: effective role + permissions. */
+  role?: string;
+  permissions?: string[];
 }
 
 function findToken(value: unknown, depth = 0): string | undefined {
@@ -59,9 +62,22 @@ export async function login(role: Role, payload: LoginPayload): Promise<LoginRes
       email:
         userRecord.email as string | undefined ?? payload.email,
       role,
-      image: userRecord.image as string | undefined
+      image: userRecord.image as string | undefined,
+      staffRole: role === 'admin' ? raw.role : undefined,
+      permissions: role === 'admin' && Array.isArray(raw.permissions) ? raw.permissions : undefined
     }
   };
+}
+
+export interface MeResponse {
+  data: Record<string, unknown> & {_id: string;name?: string;email?: string;image?: string;};
+  role: string;
+  permissions: string[];
+}
+
+/** GET /me — the signed-in user with the current role and permissions. */
+export function fetchMe(signal?: AbortSignal): Promise<MeResponse> {
+  return request<MeResponse>('/me', { signal });
 }
 
 /** Fetches the signed-in principal for teacher/student/parent. */

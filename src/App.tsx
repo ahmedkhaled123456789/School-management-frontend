@@ -10,7 +10,13 @@ import { AdminLayout } from './components/layout/AdminLayout';
 import { TeacherLayout } from './components/layout/TeacherLayout';
 import { StudentLayout } from './components/layout/StudentLayout';
 import { LoginPage } from './pages/Login';
-import { AdminDashboard } from './pages/admin/Dashboard';
+import { AdminHome, AdminOrStaffProfile } from './pages/admin/StaffHome';
+import { AdminAdministrators } from './pages/admin/Administrators';
+import { AdminStaff } from './pages/admin/Staff';
+import { AdminAuditLog } from './pages/admin/AuditLog';
+import { AdminSettings } from './pages/admin/Settings';
+import { RequirePermission } from './components/auth/RequirePermission';
+import { PERMISSIONS } from './lib/permissions';
 import { AdminStudents } from './pages/admin/Students';
 import { AdminStudentDetail } from './pages/admin/StudentDetail';
 import { AdminTeachers } from './pages/admin/Teachers';
@@ -22,7 +28,6 @@ import { AdminAcademicYears } from './pages/admin/AcademicYears';
 import { AdminAcademicTerms } from './pages/admin/AcademicTerms';
 import { AdminYearGroups } from './pages/admin/YearGroups';
 import { AdminExamResults } from './pages/admin/ExamResults';
-import { AdminProfile } from './pages/admin/Profile';
 import { AdminParents } from './pages/admin/Parents';
 import { AdminFeesGroups } from './pages/admin/FeesGroups';
 import { AdminExpenses } from './pages/admin/Expenses';
@@ -63,22 +68,44 @@ export function App() {
             {/* Admin */}
             <Route element={<ProtectedRoute allow="admin" />}>
               <Route path="/admin" element={<AdminLayout />}>
-                <Route index element={<AdminDashboard />} />
-                <Route path="students" element={<AdminStudents />} />
-                <Route path="students/:studentID" element={<AdminStudentDetail />} />
-                <Route path="teachers" element={<AdminTeachers />} />
-                <Route path="teachers/:teacherID" element={<AdminTeacherDetail />} />
-                <Route path="programs" element={<AdminPrograms />} />
-                <Route path="subjects" element={<AdminSubjects />} />
-                <Route path="classes" element={<AdminClassLevels />} />
-                <Route path="academic-years" element={<AdminAcademicYears />} />
-                <Route path="academic-terms" element={<AdminAcademicTerms />} />
-                <Route path="year-groups" element={<AdminYearGroups />} />
-                <Route path="exam-results" element={<AdminExamResults />} />
-                <Route path="profile" element={<AdminProfile />} />
-                <Route path="parents" element={<AdminParents />} />
-                <Route path="fees-groups" element={<AdminFeesGroups />} />
-                <Route path="expenses" element={<AdminExpenses />} />
+                <Route index element={<AdminHome />} />
+                <Route path="profile" element={<AdminOrStaffProfile />} />
+
+                {/* each section is limited to the roles that hold its permission */}
+                <Route element={<RequirePermission permission={PERMISSIONS.STUDENTS_READ} />}>
+                  <Route path="students" element={<AdminStudents />} />
+                  <Route path="students/:studentID" element={<AdminStudentDetail />} />
+                  <Route path="parents" element={<AdminParents />} />
+                </Route>
+                <Route element={<RequirePermission permission={PERMISSIONS.TEACHERS_MANAGE} />}>
+                  <Route path="teachers" element={<AdminTeachers />} />
+                  <Route path="teachers/:teacherID" element={<AdminTeacherDetail />} />
+                </Route>
+                <Route element={<RequirePermission permission={PERMISSIONS.ACADEMICS_MANAGE} />}>
+                  <Route path="programs" element={<AdminPrograms />} />
+                  <Route path="subjects" element={<AdminSubjects />} />
+                  <Route path="classes" element={<AdminClassLevels />} />
+                  <Route path="academic-years" element={<AdminAcademicYears />} />
+                  <Route path="academic-terms" element={<AdminAcademicTerms />} />
+                  <Route path="year-groups" element={<AdminYearGroups />} />
+                  <Route path="exam-results" element={<AdminExamResults />} />
+                </Route>
+                <Route element={<RequirePermission permission={PERMISSIONS.FINANCE_MANAGE} />}>
+                  <Route path="fees-groups" element={<AdminFeesGroups />} />
+                  <Route path="expenses" element={<AdminExpenses />} />
+                </Route>
+                <Route element={<RequirePermission permission={PERMISSIONS.ADMINS_MANAGE} />}>
+                  <Route path="administrators" element={<AdminAdministrators />} />
+                </Route>
+                <Route element={<RequirePermission permission={PERMISSIONS.STAFF_MANAGE} />}>
+                  <Route path="staff" element={<AdminStaff />} />
+                </Route>
+                <Route element={<RequirePermission permission={PERMISSIONS.AUDIT_READ} />}>
+                  <Route path="audit-log" element={<AdminAuditLog />} />
+                </Route>
+                <Route element={<RequirePermission permission={PERMISSIONS.SETTINGS_MANAGE} />}>
+                  <Route path="settings" element={<AdminSettings />} />
+                </Route>
               </Route>
             </Route>
 

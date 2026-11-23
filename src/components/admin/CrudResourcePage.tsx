@@ -46,6 +46,8 @@ interface CrudResourcePageProps<T> {
   createDisabledReason?: string;
   renderDetails?: (row: T) => React.ReactNode;
   headerExtra?: React.ReactNode;
+  /** Hide create / edit / delete (user may only read this resource). */
+  readOnly?: boolean;
 }
 
 function emptyValues(fields: FieldConfig[]): FormValues {
@@ -73,7 +75,8 @@ export function CrudResourcePage<T>({
   emptyDescription,
   createDisabledReason,
   renderDetails,
-  headerExtra
+  headerExtra,
+  readOnly = false
 }: CrudResourcePageProps<T>) {
   const [search, setSearch] = useState('');
   const [formOpen, setFormOpen] = useState(false);
@@ -153,7 +156,8 @@ export function CrudResourcePage<T>({
             View
           </Button>
       }
-        <Button
+        {!readOnly &&
+      <Button
         variant="ghost"
         size="sm"
         onClick={() => openEdit(row)}
@@ -161,7 +165,8 @@ export function CrudResourcePage<T>({
         
           Edit
         </Button>
-        {onDelete &&
+      }
+        {onDelete && !readOnly &&
       <Button
         variant="ghost"
         size="sm"
@@ -183,12 +188,13 @@ export function CrudResourcePage<T>({
         description={description}
         breadcrumbs={[{ label: 'Admin', to: '/admin' }, { label: title }]}
         actions={
+        readOnly ? undefined :
         <Button
           onClick={openCreate}
           disabled={Boolean(createDisabledReason)}
           title={createDisabledReason}
           icon={<PlusIcon className="h-4 w-4" aria-hidden="true" />}>
-          
+
             New {entityName}
           </Button>
         } />
@@ -222,7 +228,7 @@ export function CrudResourcePage<T>({
           emptyTitle={search ? `No ${title.toLowerCase()} match your search` : `No ${title.toLowerCase()} found`}
           emptyDescription={search ? 'Try a different search term.' : emptyDescription}
           emptyAction={
-          !search && !createDisabledReason ?
+          !search && !createDisabledReason && !readOnly ?
           <Button onClick={openCreate} icon={<PlusIcon className="h-4 w-4" aria-hidden="true" />}>
                 Add {entityName}
               </Button> :

@@ -2,7 +2,11 @@ import type { ListParams } from '../types/common';
 
 /** Single source of truth for every React Query key used in the app. */
 export const queryKeys = {
+  me: ['me'] as const,
   admins: ['admins'] as const,
+  staff: ['staff'] as const,
+  settings: ['settings'] as const,
+  auditLogs: (params: ListParams) => ['auditLogs', params] as const,
   adminProfile: ['adminProfile'] as const,
 
   students: (params: ListParams) => ['students', params] as const,

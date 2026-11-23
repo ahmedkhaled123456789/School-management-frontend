@@ -15,6 +15,9 @@ import { useStudent, useUpdateStudent } from '../../hooks/students';
 import { formatDate, relationLabel } from '../../utils/format';
 import { AvatarUploader } from '../../components/ui/AvatarUploader';
 import { StudentParentsCard } from '../../components/admin/ParentStudentLinks';
+import { Avatar } from '../../components/ui/Avatar';
+import { usePermissions } from '../../hooks/permissions';
+import { PERMISSIONS } from '../../lib/permissions';
 import { emailField, requiredField, type Errors } from '../../utils/validation';
 
 interface EditValues {
@@ -50,7 +53,8 @@ export function AdminStudentDetail() {
 
   const [values, setValues] = useState<EditValues>(EMPTY);
   const [errors, setErrors] = useState<Errors<EditValues>>({});
-  const [isEditing, setIsEditing] = useState(searchParams.get('edit') === '1');
+  const canManage = usePermissions().can(PERMISSIONS.STUDENTS_MANAGE);
+  const [isEditing, setIsEditing] = useState(searchParams.get('edit') === '1' && canManage);
 
   const student = query.data;
 
@@ -138,7 +142,7 @@ export function AdminStudentDetail() {
         { label: student?.name ?? 'Detail' }]
         }
         actions={
-        !query.isLoading &&
+        !query.isLoading && canManage &&
         <Button
           variant={isEditing ? 'secondary' : 'primary'}
           onClick={() => setIsEditing((prev) => !prev)}>
@@ -160,11 +164,15 @@ export function AdminStudentDetail() {
 
             <>
                 <div className="flex items-center gap-3">
-                  <AvatarUploader
-                    image={student?.image}
-                    name={student?.name}
-                    isSaving={update.isPending}
-                    onChange={(image) => update.mutateAsync({ image })} />
+                  {canManage ?
+                <AvatarUploader
+                  image={student?.image}
+                  name={student?.name}
+                  isSaving={update.isPending}
+                  onChange={(image) => update.mutateAsync({ image })} /> :
+
+                <Avatar image={student?.image} name={student?.name} size="lg" />
+                }
                   <div className="min-w-0">
                     <p className="truncate text-[15px] font-bold text-ink-900">{student?.name}</p>
                     <p className="truncate font-mono text-[12px] text-ink-500">
@@ -331,7 +339,8 @@ export function AdminStudentDetail() {
         <StudentParentsCard
           studentId={studentID}
           parents={student?.parents}
-          isLoading={query.isLoading} />
+          isLoading={query.isLoading}
+          readOnly={!canManage} />
 
       </div>
     </>);

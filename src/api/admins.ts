@@ -1,6 +1,16 @@
 import { normalizeList, request, unwrap } from './client';
 import type { PaginatedResult } from '../types/common';
-import type { Admin, AdminUpdatePayload } from '../types/admin';
+import type { Admin, AdminUpdatePayload, CreateAdminPayload } from '../types/admin';
+
+/** POST /admins/register — super admin only. */
+export async function createAdmin(payload: CreateAdminPayload): Promise<Admin> {
+  return unwrap<Admin>(await request('/admins/register', { method: 'POST', body: payload }));
+}
+
+/** DELETE /admins/:id — super admin only (not yourself, not the last super admin). */
+export async function deleteAdmin(id: string): Promise<void> {
+  await request(`/admins/${id}`, { method: 'DELETE' });
+}
 
 /** GET /admins — admin only. */
 export function listAdmins(signal?: AbortSignal): Promise<PaginatedResult<Admin>> {

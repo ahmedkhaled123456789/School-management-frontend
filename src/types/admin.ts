@@ -12,6 +12,7 @@ export interface Admin extends Timestamped {
   /** Spelled `lauguage` by the backend model — kept verbatim so payloads match. */
   lauguage?: string;
   image?: string;
+  isSuperAdmin?: boolean;
   academicYears?: unknown[];
   academicTerms?: unknown[];
   classLevels?: unknown[];
@@ -30,4 +31,15 @@ export interface AdminUpdatePayload {
   schoolName?: string;
   city?: string;
   lauguage?: string;
+  /** Super admin only, never on yourself. */
+  isSuperAdmin?: boolean;
+}
+
+export interface CreateAdminPayload {
+  name: string;
+  email: string;
+  password: string;
+  phone: string;
+  address?: string;
+  isSuperAdmin?: boolean;
 }
