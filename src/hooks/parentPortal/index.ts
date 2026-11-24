@@ -13,11 +13,12 @@ import type { ListParams } from '../../types/common';
 import type { ParentSelfUpdatePayload } from '../../types/parentPortal';
 import { useAuth } from '../auth';
 
-export function useMyChildren(params: ListParams = {}) {
+export function useMyChildren(params: ListParams = {}, enabled = true) {
   return useQuery({
     queryKey: queryKeys.myChildren(params),
     queryFn: ({ signal }) => listMyChildren(params, signal),
-    placeholderData: keepPreviousData
+    placeholderData: keepPreviousData,
+    enabled
   });
 }
 

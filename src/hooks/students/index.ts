@@ -36,10 +36,11 @@ export function useStudent(studentID?: string) {
   });
 }
 
-export function useStudentProfile() {
+export function useStudentProfile(enabled = true) {
   return useQuery({
     queryKey: queryKeys.studentProfile,
-    queryFn: ({ signal }) => getStudentProfile(signal)
+    queryFn: ({ signal }) => getStudentProfile(signal),
+    enabled
   });
 }
 

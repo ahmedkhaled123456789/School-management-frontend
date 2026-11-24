@@ -18,6 +18,8 @@ import { ChildFees } from '../../components/parent/ChildFees';
 import { StudentClassCard } from '../../components/sections/StudentClassCard';
 import { StudentAttendanceCard } from '../../components/attendance/StudentAttendanceCard';
 import { HealthSummaryCard } from '../../components/health/HealthSummaryCard';
+import { StudentCertificatesCard } from '../../components/certificates/StudentCertificatesCard';
+import { StudentLibraryCard } from '../../components/library/StudentLibraryCard';
 
 const PAGE_SIZE = 10;
 
@@ -189,6 +191,10 @@ export function ParentChildDetail() {
       <StudentClassCard studentId={studentId} />
       <StudentAttendanceCard studentId={studentId} who={profile?.name.split(' ')[0] ?? 'Your child'} />
       {profile && <HealthSummaryCard student={{ _id: profile._id, name: profile.name, studentId: profile.studentId }} mode="parent" className="mt-5" />}
+      <div className="mt-5 grid gap-5 lg:grid-cols-2">
+        <StudentCertificatesCard studentId={studentId} />
+        <StudentLibraryCard studentId={studentId} />
+      </div>
       <ChildFees studentId={studentId} />
     </>);
 

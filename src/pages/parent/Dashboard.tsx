@@ -10,6 +10,7 @@ import { ChildStatusBadge, ResultStatusBadge } from '../../components/parent/chi
 import { childClassLabel, resultGradeLabel } from '../../utils/parentPortal';
 import { useAuth } from '../../hooks/auth';
 import { useMyChildren } from '../../hooks/parentPortal';
+import { FamilyTodo } from '../../components/communication/FamilyTodo';
 import type { ParentChild } from '../../types/parentPortal';
 import { formatDate, relationLabel } from '../../utils/format';
 
@@ -99,6 +100,7 @@ export function ParentDashboard() {
       <PageHeader
         title={firstName ? `Hello, ${firstName}` : 'My children'}
         description="Your children's enrolment details and their latest published exam results." />
+      <FamilyTodo />
 
 
       {query.isError ?

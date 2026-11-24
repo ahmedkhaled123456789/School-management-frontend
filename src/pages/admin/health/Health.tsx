@@ -106,7 +106,7 @@ export function AdminHealth() {
       {tab === 'students' ?
       <Card>
           <div className="flex flex-wrap items-center gap-3 border-b border-ink-100 px-5 py-3">
-            <div className="w-64"><SearchInput value={query} onChange={setQuery} placeholder="Name, code or allergy…" /></div>
+            <div className="w-64"><SearchInput className="sm:w-full" value={query} onChange={setQuery} placeholder="Name, code or allergy…" /></div>
             <div role="radiogroup" aria-label="Filter" className="scrollbar-thin flex gap-1 overflow-x-auto rounded-lg bg-ink-100 p-1">
               {FILTERS.map((f) =>
             <button key={f.id} type="button" role="radio" aria-checked={filter === f.id} onClick={() => setFilter(f.id)}

@@ -18,6 +18,7 @@ import type {
 import type { StudentRef } from '../types/sections';
 import { addDays, isDateKey, nowTime, todayKey } from '../utils/attendance';
 import { toMinutes } from '../utils/timetable';
+import { notify, queueOutbox } from './communication';
 
 const READ = 'students.read';
 const MANAGE = 'students.manage';
@@ -179,6 +180,17 @@ export async function addClinicVisit(payload: ClinicVisitPayload): Promise<{visi
     };
     db.clinicVisits.push(visit);
     let registersUpdated = 0;
+    if (visit.action === 'sent_home' || visit.action === 'referred') {
+      const what = visit.action === 'sent_home' ? 'was sent home by the school clinic' : 'was referred to a doctor by the school clinic';
+      notify(db, {
+        to: [`parent-of:${visit.student._id}`],
+        kind: 'clinic',
+        title: `${visit.student.name} ${what}`,
+        body: `${visit.complaint}${visit.temperature ? ` · ${visit.temperature} °C` : ''} · ${visit.date} ${visit.time}`,
+        href: { parent: `/parent/attendance?child=${visit.student._id}` }
+      });
+      queueOutbox(db, { channel: 'sms', to: `Parents of ${visit.student.name}`, kind: 'clinic', body: `${visit.student.name} ${what} at ${visit.time} (${visit.complaint}). Please call the school.` });
+    }
     if (visit.action === 'sent_home') {
       const starts = new Map(db.schoolDay.periods.map((p) => [p._id, toMinutes(p.start)]));
       db.registers.forEach((r) => {

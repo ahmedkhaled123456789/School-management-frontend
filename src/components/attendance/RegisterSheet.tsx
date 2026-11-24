@@ -135,7 +135,7 @@ export function RegisterSheet({ draft, alerts = {}, canOverrideLock, viewOnly, i
           )}
         </ul>
         <div className="ms-auto flex flex-wrap items-center gap-2">
-          <div className="w-52"><SearchInput value={query} onChange={setQuery} placeholder="Find a student…" /></div>
+          <div className="w-52"><SearchInput className="sm:w-full" value={query} onChange={setQuery} placeholder="Find a student…" /></div>
           {!readOnly &&
           <>
               <Button variant="secondary" size="sm" icon={<CheckCheckIcon className="h-3.5 w-3.5" aria-hidden="true" />} onClick={markAllPresent}>All present</Button>

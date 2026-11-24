@@ -37,10 +37,11 @@ export function useTeacher(teacherID?: string) {
   });
 }
 
-export function useTeacherProfile() {
+export function useTeacherProfile(enabled = true) {
   return useQuery({
     queryKey: queryKeys.teacherProfile,
-    queryFn: ({ signal }) => getTeacherProfile(signal)
+    queryFn: ({ signal }) => getTeacherProfile(signal),
+    enabled
   });
 }
 

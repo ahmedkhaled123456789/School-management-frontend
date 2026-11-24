@@ -106,10 +106,10 @@ export const ADMIN_NAV: NavEntry[] = [
   children: [
   { label: 'All Students', to: '/admin/students', icon: GraduationCapIcon, permission: P.STUDENTS_READ },
   { label: 'Parents', to: '/admin/parents', icon: UsersRoundIcon, permission: P.STUDENTS_READ },
-  { label: 'Admissions', to: '/admin/admissions', icon: UserPlusIcon, permission: P.STUDENTS_READ, module: 'admissions' },
+  { label: 'Admissions', to: '/admin/admissions', icon: UserPlusIcon, permission: P.STUDENTS_READ },
   { label: 'Attendance', to: '/admin/attendance', icon: CalendarCheckIcon, permission: P.STUDENTS_READ },
   { label: 'Health', to: '/admin/health', icon: HeartPulseIcon, permission: P.STUDENTS_READ },
-  { label: 'Certificates', to: '/admin/certificates', icon: IdCardIcon, permission: P.STUDENTS_READ, module: 'certificates' }]
+  { label: 'Certificates', to: '/admin/certificates', icon: IdCardIcon, permission: P.STUDENTS_READ }]
 
 },
 {
@@ -140,9 +140,9 @@ export const ADMIN_NAV: NavEntry[] = [
   { label: 'Teachers', to: '/admin/teachers', icon: UsersIcon, permission: P.TEACHERS_MANAGE },
   { label: 'Staff Accounts', to: '/admin/staff', icon: BriefcaseIcon, permission: P.STAFF_MANAGE },
   { label: 'Attendance', to: '/admin/hr/attendance', icon: UserCheckIcon, permission: P.STAFF_MANAGE },
-  { label: 'Contracts', to: '/admin/hr/contracts', icon: FileSignatureIcon, permission: P.STAFF_MANAGE, module: 'hr' },
-  { label: 'Leave', to: '/admin/hr/leave', icon: PlaneIcon, permission: P.STAFF_MANAGE, module: 'hr' },
-  { label: 'Performance', to: '/admin/hr/performance', icon: TrendingUpIcon, permission: P.STAFF_MANAGE, module: 'hr' }]
+  { label: 'Contracts', to: '/admin/hr/contracts', icon: FileSignatureIcon, permission: P.STAFF_MANAGE },
+  { label: 'Leave', to: '/admin/hr/leave', icon: PlaneIcon, permission: P.STAFF_MANAGE },
+  { label: 'Performance', to: '/admin/hr/performance', icon: TrendingUpIcon, permission: P.STAFF_MANAGE }]
 
 },
 {
@@ -164,10 +164,10 @@ export const ADMIN_NAV: NavEntry[] = [
   label: 'Communication',
   icon: MessagesSquareIcon,
   children: [
-  { label: 'Notices', to: '/admin/communication/announcements', icon: MegaphoneIcon, module: 'communication' },
-  { label: 'Messages', to: '/admin/communication/messages', icon: MessagesSquareIcon, module: 'communication' },
-  { label: 'SMS & Email', to: '/admin/communication/outbox', icon: SendIcon, module: 'communication' },
-  { label: 'Events', to: '/admin/events', icon: PartyPopperIcon, module: 'events' }]
+  { label: 'Notices', to: '/admin/communication/announcements', icon: MegaphoneIcon, permission: P.STUDENTS_READ },
+  { label: 'Messages', to: '/admin/communication/messages', icon: MessagesSquareIcon, permission: P.STUDENTS_READ },
+  { label: 'SMS & Email', to: '/admin/communication/outbox', icon: SendIcon, permission: P.STUDENTS_READ },
+  { label: 'Events', to: '/admin/events', icon: PartyPopperIcon, permission: P.STUDENTS_READ }]
 
 },
 {
@@ -175,10 +175,10 @@ export const ADMIN_NAV: NavEntry[] = [
   label: 'Services',
   icon: StoreIcon,
   children: [
-  { label: 'Library', to: '/admin/library', icon: LibraryBigIcon, permission: P.STUDENTS_READ, module: 'library' },
-  { label: 'Transport', to: '/admin/transport', icon: BusIcon, permission: P.STUDENTS_READ, module: 'transport' },
-  { label: 'Canteen', to: '/admin/canteen', icon: StoreIcon, permission: P.STUDENTS_READ, module: 'hostel-canteen' },
-  { label: 'Hostel', to: '/admin/hostel', icon: BedDoubleIcon, permission: P.STUDENTS_READ, module: 'hostel-canteen' }]
+  { label: 'Library', to: '/admin/library', icon: LibraryBigIcon, permission: P.STUDENTS_READ },
+  { label: 'Transport', to: '/admin/transport', icon: BusIcon, permission: P.STUDENTS_READ },
+  { label: 'Canteen', to: '/admin/canteen', icon: StoreIcon, permission: P.STUDENTS_READ },
+  { label: 'Hostel', to: '/admin/hostel', icon: BedDoubleIcon, permission: P.STUDENTS_READ }]
 
 },
 {
@@ -204,8 +204,8 @@ export const TEACHER_NAV: NavItem[] = [
 { label: 'Questions', to: '/teacher/questions', icon: FileQuestionIcon },
 { label: 'Attendance', to: '/teacher/attendance', icon: CalendarCheckIcon },
 { label: 'Online Classes', to: '/teacher/online-classes', icon: VideoIcon, module: 'online-classes' },
-{ label: 'Messages', to: '/teacher/messages', icon: MessagesSquareIcon, module: 'communication' },
-{ label: 'Leave', to: '/teacher/leave', icon: PlaneIcon, module: 'hr' },
+{ label: 'Messages', to: '/teacher/messages', icon: MessagesSquareIcon },
+{ label: 'Leave & HR', to: '/teacher/leave', icon: PlaneIcon },
 { label: 'Profile', to: '/teacher/profile', icon: UserCogIcon }];
 
 
@@ -217,16 +217,18 @@ export const STUDENT_NAV: NavItem[] = [
 { label: 'Exam Results', to: '/student/results', icon: AwardIcon },
 { label: 'Attendance', to: '/student/attendance', icon: CalendarCheckIcon },
 { label: 'Online Classes', to: '/student/online-classes', icon: VideoIcon, module: 'online-classes' },
-{ label: 'Library', to: '/student/library', icon: LibraryBigIcon, module: 'library' },
-{ label: 'Announcements', to: '/student/announcements', icon: MegaphoneIcon, module: 'communication' }];
+{ label: 'Library', to: '/student/library', icon: LibraryBigIcon },
+{ label: 'Announcements', to: '/student/announcements', icon: MegaphoneIcon },
+{ label: 'Certificates', to: '/student/certificates', icon: AwardIcon }];
 
 
 export const PARENT_NAV: NavItem[] = [
 { label: 'My Children', to: '/parent', icon: LayoutDashboardIcon, end: true },
 { label: 'Attendance', to: '/parent/attendance', icon: CalendarCheckIcon },
-{ label: 'Messages', to: '/parent/messages', icon: MessagesSquareIcon, module: 'communication' },
-{ label: 'Events', to: '/parent/events', icon: PartyPopperIcon, module: 'events' },
-{ label: 'Transport', to: '/parent/transport', icon: BusIcon, module: 'transport' },
+{ label: 'Messages', to: '/parent/messages', icon: MessagesSquareIcon },
+{ label: 'Events', to: '/parent/events', icon: PartyPopperIcon },
+{ label: 'Transport', to: '/parent/transport', icon: BusIcon },
+{ label: 'Canteen', to: '/parent/canteen', icon: StoreIcon },
 { label: 'My Profile', to: '/parent/profile', icon: UserCogIcon }];
 
 

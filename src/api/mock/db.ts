@@ -14,6 +14,14 @@ import type { AuthUser } from '../../types/auth';
 import type { Ref, Room, SchoolDay, Section, TimetableEntry } from '../../types/sections';
 import type { AttendanceSettings, GateScan, StaffAttendanceRecord, StoredRegister } from '../../types/attendance';
 import type { ClinicVisit, HealthProfile } from '../../types/health';
+import type { Announcement, AppNotification, CommSettings, OutboxItem, Thread } from '../../types/communication';
+import type { SchoolEvent } from '../../types/events';
+import type { AdmissionSettings, Application } from '../../types/admissions';
+import type { Certificate, CertificateSettings } from '../../types/certificates';
+import type { Book, LibrarySettings, Loan } from '../../types/library';
+import type { Boarding, Bus, Route, Subscription, TripRun } from '../../types/transport';
+import type { Contract, LeaveRequest, Review } from '../../types/hr';
+import type { BedAllocation, HostelRoom, MenuItem, Wallet, WalletTx } from '../../types/boarding';
 
 const STORAGE_KEY = 'sms.mock.v1';
 const SESSION_USER_KEY = 'sms.user';
@@ -32,6 +40,36 @@ export interface MockDb {
   attendanceSettings: AttendanceSettings;
   healthProfiles: HealthProfile[];
   clinicVisits: ClinicVisit[];
+  // communication & events
+  announcements: Announcement[];
+  threads: Thread[];
+  notifications: AppNotification[];
+  outbox: OutboxItem[];
+  commSettings: CommSettings;
+  events: SchoolEvent[];
+  // admissions & certificates
+  applications: Application[];
+  admissionSettings: AdmissionSettings;
+  certificates: Certificate[];
+  certificateSettings: CertificateSettings;
+  // library & transport
+  books: Book[];
+  loans: Loan[];
+  librarySettings: LibrarySettings;
+  buses: Bus[];
+  routes: Route[];
+  subscriptions: Subscription[];
+  boardings: Boarding[];
+  tripRuns: TripRun[];
+  // HR, hostel & canteen
+  contracts: Contract[];
+  leaves: LeaveRequest[];
+  reviews: Review[];
+  hostelRooms: HostelRoom[];
+  allocations: BedAllocation[];
+  menu: MenuItem[];
+  wallets: Wallet[];
+  walletTx: WalletTx[];
 }
 
 /** Sun–Thu, 7 periods of 45 min with a break after the third (Egyptian school day). */
@@ -51,6 +89,13 @@ export function defaultSchoolDay(): SchoolDay {
   };
 }
 
+export const defaultAdmissionSettings = (): AdmissionSettings => ({ passMark: 50, open: true });
+export const defaultCertificateSettings = (): CertificateSettings => ({ signerName: 'School Principal', signerTitle: 'Principal', cardsValidUntil: `${new Date().getFullYear() + 1}-06-30` });
+
+export const defaultLibrarySettings = (): LibrarySettings => ({ loanDays: 14, maxLoansStudent: 3, maxLoansStaff: 5, maxRenewals: 1, finePerDay: 200 });
+
+export const defaultCommSettings = (): CommSettings => ({ smsAbsence: true, smsClinic: true, emailAnnouncements: true, emailEvents: true });
+
 export const defaultAttendanceSettings = (): AttendanceSettings => ({ staffStart: '07:45', graceMinutes: 10, lockDays: 3 });
 
 const emptyDb = (): MockDb => ({
@@ -64,7 +109,33 @@ const emptyDb = (): MockDb => ({
   staffAttendance: [],
   attendanceSettings: defaultAttendanceSettings(),
   healthProfiles: [],
-  clinicVisits: []
+  clinicVisits: [],
+  announcements: [],
+  threads: [],
+  notifications: [],
+  outbox: [],
+  commSettings: defaultCommSettings(),
+  events: [],
+  applications: [],
+  admissionSettings: defaultAdmissionSettings(),
+  certificates: [],
+  certificateSettings: defaultCertificateSettings(),
+  books: [],
+  loans: [],
+  librarySettings: defaultLibrarySettings(),
+  buses: [],
+  routes: [],
+  subscriptions: [],
+  boardings: [],
+  tripRuns: [],
+  contracts: [],
+  leaves: [],
+  reviews: [],
+  hostelRooms: [],
+  allocations: [],
+  menu: [],
+  wallets: [],
+  walletTx: []
 });
 
 /** Adds collections introduced after the data was first stored. */
@@ -76,14 +147,41 @@ function upgrade(db: MockDb): MockDb {
     staffAttendance: Array.isArray(db.staffAttendance) ? db.staffAttendance : [],
     attendanceSettings: { ...defaultAttendanceSettings(), ...(db.attendanceSettings ?? {}) },
     healthProfiles: Array.isArray(db.healthProfiles) ? db.healthProfiles : [],
-    clinicVisits: Array.isArray(db.clinicVisits) ? db.clinicVisits : []
+    clinicVisits: Array.isArray(db.clinicVisits) ? db.clinicVisits : [],
+    announcements: Array.isArray(db.announcements) ? db.announcements : [],
+    threads: Array.isArray(db.threads) ? db.threads : [],
+    notifications: Array.isArray(db.notifications) ? db.notifications : [],
+    outbox: Array.isArray(db.outbox) ? db.outbox : [],
+    commSettings: { ...defaultCommSettings(), ...(db.commSettings ?? {}) },
+    events: Array.isArray(db.events) ? db.events : [],
+    applications: Array.isArray(db.applications) ? db.applications : [],
+    admissionSettings: { ...defaultAdmissionSettings(), ...(db.admissionSettings ?? {}) },
+    certificates: Array.isArray(db.certificates) ? db.certificates : [],
+    certificateSettings: { ...defaultCertificateSettings(), ...(db.certificateSettings ?? {}) },
+    books: Array.isArray(db.books) ? db.books : [],
+    loans: Array.isArray(db.loans) ? db.loans : [],
+    librarySettings: { ...defaultLibrarySettings(), ...(db.librarySettings ?? {}) },
+    buses: Array.isArray(db.buses) ? db.buses : [],
+    routes: Array.isArray(db.routes) ? db.routes : [],
+    subscriptions: Array.isArray(db.subscriptions) ? db.subscriptions : [],
+    boardings: Array.isArray(db.boardings) ? db.boardings : [],
+    tripRuns: Array.isArray(db.tripRuns) ? db.tripRuns : [],
+    contracts: Array.isArray(db.contracts) ? db.contracts : [],
+    leaves: Array.isArray(db.leaves) ? db.leaves : [],
+    reviews: Array.isArray(db.reviews) ? db.reviews : [],
+    hostelRooms: Array.isArray(db.hostelRooms) ? db.hostelRooms : [],
+    allocations: Array.isArray(db.allocations) ? db.allocations : [],
+    menu: Array.isArray(db.menu) ? db.menu : [],
+    wallets: Array.isArray(db.wallets) ? db.wallets : [],
+    walletTx: Array.isArray(db.walletTx) ? db.walletTx : []
   };
 }
 
 let memory: MockDb | null = null;
 const listeners = new Set<() => void>();
 
-const clone = <T,>(value: T): T => JSON.parse(JSON.stringify(value)) as T;
+// writes that return nothing must not fail: JSON.parse(undefined) throws
+const clone = <T,>(value: T): T => value === undefined ? value : JSON.parse(JSON.stringify(value)) as T;
 
 function isMockDb(value: unknown): value is MockDb {
   const db = value as MockDb;
@@ -193,7 +291,7 @@ export function requirePermission(permission: string) {
 }
 
 /** The signed-in user as a mock server sees the token: role + a display reference. */
-export function sessionActor(): {role: string;ref: Ref;user: AuthUser;} {
+export function sessionActor(): {role: string;ref: Ref;user: AuthUser;userKey: string;} {
   let user: AuthUser | null = null;
   let role: string | null = null;
   try {
@@ -204,7 +302,8 @@ export function sessionActor(): {role: string;ref: Ref;user: AuthUser;} {
     user = null;
   }
   if (!user || !role) fail(401, 'Your session has expired. Please sign in again.');
-  return { role, user, ref: { _id: user._id ?? '', name: user.name || user.email || role } };
+  // teachers' login response has no id: the email identifies them as well
+  return { role, user, ref: { _id: user._id ?? '', name: user.name || user.email || role }, userKey: `${role}:${user._id || user.email}` };
 }
 
 /** Admin-portal users need the permission; other portals must match `roles`. */

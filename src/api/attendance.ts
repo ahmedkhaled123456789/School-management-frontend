@@ -43,6 +43,9 @@ import {
 import { DAY_LABEL, sectionLabel, toMinutes, weekDayOf } from '../utils/timetable';
 import { dateFromKey } from '../utils/attendance';
 import { seedHealth } from './health';
+import { notifyAbsence } from './communication';
+import { morningBoarding } from './transport';
+import { coverFor } from './hr';
 
 const READ = 'students.read';
 const MANAGE = 'students.manage';
@@ -110,7 +113,8 @@ db.registers.find((r) => r.academicYear === academicYear && r.section._id === se
 
 /** Teachers may only touch their own lessons (or their homeroom), and only recently. */
 function assertTeacherMay(db: MockDb, lesson: Lesson, date: string, teacherId: string | undefined) {
-  if (!teacherId || lesson.entry.teacher._id !== teacherId && lesson.section.homeroomTeacher?._id !== teacherId) {
+  const covering = Boolean(teacherId) && coverFor(db, teacherId as string, lesson.section._id, date, lesson.period._id);
+  if (!teacherId || lesson.entry.teacher._id !== teacherId && lesson.section.homeroomTeacher?._id !== teacherId && !covering) {
     fail(403, 'You can only take attendance for your own lessons');
   }
   const age = daysBetween(date, todayKey());
@@ -171,7 +175,7 @@ export async function getRegisterDraft(academicYear: string, sectionId: string, 
   return read((db) => {
     const lesson = resolveLesson(db, academicYear, sectionId, date, periodId);
     const { section, entry, period } = lesson;
-    if (role === 'teacher' && teacherId && entry.teacher._id !== teacherId && section.homeroomTeacher?._id !== teacherId) {
+    if (role === 'teacher' && teacherId && entry.teacher._id !== teacherId && section.homeroomTeacher?._id !== teacherId && !coverFor(db, teacherId, sectionId, date, periodId)) {
       fail(403, 'You can only take attendance for your own lessons');
     }
     const index = studentIndex(db);
@@ -208,6 +212,12 @@ export async function getRegisterDraft(academicYear: string, sectionId: string, 
           return { student, status: ex.status, reason: ex.reason };
         }
         if (r.roster.includes(student._id)) break; // was there in the latest earlier period
+      }
+      // the morning bus counts as arriving (it drops students inside the school)
+      const bus = morningBoarding(db, student._id, date);
+      if (bus && !scans.some((g) => g.student._id === student._id)) {
+        hint(student._id, { kind: 'gate', text: `Came by bus (boarded ${bus.at})` });
+        return { student, status: 'present' };
       }
       if (gateInUse) {
         const scan = scans.find((g) => g.student._id === student._id);
@@ -284,7 +294,8 @@ export async function saveRegister(academicYear: string, payload: RegisterPayloa
       ...(m.note?.trim() ? { note: m.note.trim() } : {})
     }));
     const existing = findStored(db, academicYear, payload.sectionId, payload.date, payload.periodId);
-    const takenBy = actor.role === 'teacher' ? lesson.entry.teacher : actor.ref;
+    // a substitute covering the lesson signs the register with their own name
+    const takenBy = actor.role !== 'teacher' ? actor.ref : teacherId && teacherId !== lesson.entry.teacher._id ? { _id: teacherId, name: `${actor.ref.name} (cover)` } : lesson.entry.teacher;
     const stored: StoredRegister = {
       _id: existing?._id ?? newId(),
       academicYear,
@@ -298,8 +309,13 @@ export async function saveRegister(academicYear: string, payload: RegisterPayloa
       createdAt: existing?.createdAt ?? nowIso(),
       updatedAt: nowIso()
     };
+    const wasAbsent = new Set(existing?.exceptions.filter((e) => e.status === 'absent').map((e) => e.studentId) ?? []);
     if (existing) Object.assign(existing, stored);else
     db.registers.push(stored);
+    // parents hear about an unexcused absence the first time it is recorded that day
+    clean.filter((m) => m.status === 'absent' && !wasAbsent.has(m.student._id)).forEach((m) =>
+    notifyAbsence(db, m.student, payload.date, `${lesson.period.label} · ${lesson.entry.subject.name}`)
+    );
     return expand(stored, studentIndex(db));
   });
 }

@@ -116,7 +116,7 @@ export function AdminStaffAttendance() {
 
       <Card>
         <div className="flex flex-wrap items-center gap-3 border-b border-ink-100 px-5 py-3">
-          <div className="w-60"><SearchInput value={query} onChange={setQuery} placeholder="Search name or email…" /></div>
+          <div className="w-60"><SearchInput className="sm:w-full" value={query} onChange={setQuery} placeholder="Search name or email…" /></div>
           <div role="radiogroup" aria-label="Show" className="scrollbar-thin flex gap-1 overflow-x-auto rounded-lg bg-ink-100 p-1">
             {(['all', 'missing', 'present', 'late', 'absent', 'leave'] as Filter[]).map((f) =>
             <button key={f} type="button" role="radio" aria-checked={filter === f} onClick={() => setFilter(f)}

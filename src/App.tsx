@@ -76,6 +76,22 @@ import { AdminStudentHealth } from './pages/admin/health/StudentHealth';
 import { TeacherAttendance } from './pages/teacher/Attendance';
 import { StudentAttendancePage } from './pages/student/Attendance';
 import { ParentAttendancePage } from './pages/parent/Attendance';
+import { InboxPage } from './pages/communication/Inbox';
+import { AdminAnnouncements } from './pages/admin/communication/Announcements';
+import { AdminOutbox } from './pages/admin/communication/Outbox';
+import { AdminEvents } from './pages/admin/events/Events';
+import { AdminEventDetail } from './pages/admin/events/EventDetail';
+import { ParentCanteenPage, ParentEventsPage, ParentTransportPage, StudentAnnouncementsPage, StudentCertificatesPage, StudentLibraryPage } from './pages/family/FamilyPages';
+import { AdminLibrary } from './pages/admin/library/Library';
+import { AdminTransport } from './pages/admin/transport/Transport';
+import { AdminContracts, AdminLeave, AdminPerformance } from './pages/admin/hr/HrPages';
+import { AdminCanteen } from './pages/admin/canteen/Canteen';
+import { AdminHostel } from './pages/admin/hostel/Hostel';
+import { TeacherLeave } from './pages/teacher/Leave';
+import { AdminAdmissions } from './pages/admin/admissions/Admissions';
+import { AdminApplicationDetail } from './pages/admin/admissions/ApplicationDetail';
+import { AdminCertificates } from './pages/admin/certificates/Certificates';
+import { ApplyPage, VerifyPage } from './pages/public/PublicPages';
 import { ADMIN_NAV, PARENT_NAV, STUDENT_NAV, TEACHER_NAV, plannedRoutes, type NavEntry } from './components/layout/navigation';
 
 /** Placeholder pages for the planned modules listed in a portal's sidebar. */
@@ -98,14 +114,19 @@ export function App() {
           <MockDbSync />
           <Toaster
               position="top-right"
+              // below the 64px header so toasts never cover the bell / user menu
+              offset={76}
               richColors
               closeButton
-              toastOptions={{ style: { fontFamily: '"Plus Jakarta Sans", sans-serif' } }} />
+              toastOptions={{ style: { fontFamily: 'var(--font-sans)' } }} />
             
           <Routes>
             <Route path="/" element={<RoleRedirect />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/login/:role" element={<LoginPage />} />
+            {/* public: no sign-in */}
+            <Route path="/apply" element={<ApplyPage />} />
+            <Route path="/verify" element={<VerifyPage />} />
 
             {/* Finance print pages (admin portal, finance permission), no dashboard chrome */}
             <Route element={<ProtectedRoute allow="admin" />}>
@@ -132,6 +153,18 @@ export function App() {
                   <Route path="attendance/gate" element={<AdminAttendanceGate />} />
                   <Route path="health" element={<AdminHealth />} />
                   <Route path="health/:studentId" element={<AdminStudentHealth />} />
+                  <Route path="communication/announcements" element={<AdminAnnouncements />} />
+                  <Route path="communication/messages" element={<InboxPage />} />
+                  <Route path="communication/outbox" element={<AdminOutbox />} />
+                  <Route path="events" element={<AdminEvents />} />
+                  <Route path="events/:eventId" element={<AdminEventDetail />} />
+                  <Route path="admissions" element={<AdminAdmissions />} />
+                  <Route path="admissions/:applicationId" element={<AdminApplicationDetail />} />
+                  <Route path="certificates" element={<AdminCertificates />} />
+                  <Route path="library" element={<AdminLibrary />} />
+                  <Route path="transport" element={<AdminTransport />} />
+                  <Route path="canteen" element={<AdminCanteen />} />
+                  <Route path="hostel" element={<AdminHostel />} />
                 </Route>
                 <Route element={<RequirePermission permission={PERMISSIONS.TEACHERS_MANAGE} />}>
                   <Route path="teachers" element={<AdminTeachers />} />
@@ -169,6 +202,9 @@ export function App() {
                 <Route element={<RequirePermission permission={PERMISSIONS.STAFF_MANAGE} />}>
                   <Route path="staff" element={<AdminStaff />} />
                   <Route path="hr/attendance" element={<AdminStaffAttendance />} />
+                  <Route path="hr/contracts" element={<AdminContracts />} />
+                  <Route path="hr/leave" element={<AdminLeave />} />
+                  <Route path="hr/performance" element={<AdminPerformance />} />
                 </Route>
                 <Route element={<RequirePermission permission={PERMISSIONS.AUDIT_READ} />}>
                   <Route path="audit-log" element={<AdminAuditLog />} />
@@ -194,6 +230,8 @@ export function App() {
                 <Route path="attendance" element={<TeacherAttendance />} />
                 <Route path="attendance/register" element={<RegisterPage />} />
                 <Route path="profile" element={<TeacherProfile />} />
+                <Route path="messages" element={<InboxPage />} />
+                <Route path="leave" element={<TeacherLeave />} />
                 {plannedModuleRoutes(TEACHER_NAV)}
               </Route>
             </Route>
@@ -207,6 +245,9 @@ export function App() {
                 <Route path="profile" element={<StudentProfilePage />} />
                 <Route path="timetable" element={<StudentTimetablePage />} />
                 <Route path="attendance" element={<StudentAttendancePage />} />
+                <Route path="announcements" element={<StudentAnnouncementsPage />} />
+                <Route path="certificates" element={<StudentCertificatesPage />} />
+                <Route path="library" element={<StudentLibraryPage />} />
                 <Route path="exams" element={<StudentExams />} />
                 <Route path="results" element={<StudentResults />} />
                 <Route path="results/:resultID" element={<StudentResultDetail />} />
@@ -221,6 +262,10 @@ export function App() {
                 <Route path="children/:studentId" element={<ParentChildDetail />} />
                 <Route path="profile" element={<ParentProfilePage />} />
                 <Route path="attendance" element={<ParentAttendancePage />} />
+                <Route path="messages" element={<InboxPage />} />
+                <Route path="events" element={<ParentEventsPage />} />
+                <Route path="transport" element={<ParentTransportPage />} />
+                <Route path="canteen" element={<ParentCanteenPage />} />
                 {plannedModuleRoutes(PARENT_NAV)}
               </Route>
               {/* printable documents: outside the dashboard chrome */}

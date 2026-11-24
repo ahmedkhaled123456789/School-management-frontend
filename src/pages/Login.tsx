@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Navigate, useNavigate, useParams } from 'react-router-dom';
+import { Link, Navigate, useNavigate, useParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { GraduationCapIcon, HeartHandshakeIcon, ShieldCheckIcon, UsersIcon } from 'lucide-react';
 import { ApiError } from '../api/client';
@@ -200,6 +200,11 @@ export function LoginPage() {
 
         <p className="border-t border-ink-100 bg-ink-50/70 px-6 py-3 text-center text-[12px] text-ink-400">
           Accounts are provisioned by your school administrator.
+          <span className="mt-1 block">
+            <Link to="/apply" className="font-semibold text-primary-600 hover:underline">Apply for admission</Link>
+            <span aria-hidden="true"> · </span>
+            <Link to="/verify" className="font-semibold text-primary-600 hover:underline">Verify a certificate</Link>
+          </span>
         </p>
       </motion.main>
     </div>);

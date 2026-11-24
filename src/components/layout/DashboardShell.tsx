@@ -20,6 +20,7 @@ import { useBranding } from '../../hooks/branding';
 import { PERMISSIONS } from '../../lib/permissions';
 import { CommandPalette } from '../search/CommandPalette';
 import { SearchTrigger } from '../search/SearchTrigger';
+import { NotificationBell } from '../communication/NotificationBell';
 import { UserMenu } from './UserMenu';
 import { STAFF_ROLE_LABEL, type StaffRole } from '../../lib/permissions';
 
@@ -352,7 +353,8 @@ export function DashboardShell({ role, navItems }: DashboardShellProps) {
             <MenuIcon className="h-5 w-5" aria-hidden="true" />
           </button>
           <SearchTrigger onOpen={() => setSearchOpen(true)} />
-          <div className="ms-auto flex items-center gap-2">
+          <div className="ms-auto flex items-center gap-1 sm:gap-2">
+            <NotificationBell />
             <UserMenu
               name={displayName}
               roleLabel={roleLabel}

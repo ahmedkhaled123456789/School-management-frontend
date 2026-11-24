@@ -120,6 +120,7 @@ export const MODULES: Record<ModuleId, ModuleInfo> = {
     title: 'Communication',
     icon: MessagesSquareIcon,
     round: 2,
+    live: '/admin/communication/announcements',
     summary: 'Announcements, teacher–parent messages and notifications that every other module can send.',
     features: [
     'Announcements to the whole school, a year group, a section or staff',
@@ -147,6 +148,7 @@ export const MODULES: Record<ModuleId, ModuleInfo> = {
     title: 'Events',
     icon: PartyPopperIcon,
     round: 2,
+    live: '/admin/events',
     summary: 'Trips, competitions and school events with parent consent and optional fees.',
     features: [
     'Events calendar for the school, a year group or a section',
@@ -172,6 +174,7 @@ export const MODULES: Record<ModuleId, ModuleInfo> = {
     title: 'Admissions',
     icon: UserPlusIcon,
     round: 3,
+    live: '/admin/admissions',
     summary: 'From application to enrolment: applications, entrance tests, decisions and waiting lists.',
     features: [
     'Application pipeline: new → test scheduled → accepted / waitlisted / rejected',
@@ -193,6 +196,7 @@ export const MODULES: Record<ModuleId, ModuleInfo> = {
     title: 'Certificates & ID Cards',
     icon: IdCardIcon,
     round: 3,
+    live: '/admin/certificates',
     summary: 'Printable certificates and student / staff ID cards drawn on canvas with your branding.',
     features: [
     'ID cards with photo, name, section and an attendance QR code',
@@ -217,6 +221,7 @@ export const MODULES: Record<ModuleId, ModuleInfo> = {
     title: 'Library',
     icon: LibraryBigIcon,
     round: 4,
+    live: '/admin/library',
     summary: 'Book catalogue, borrowing and returns, with overdue fines charged through Finance.',
     features: [
     'Catalogue with copies, ISBN, shelf location and availability',
@@ -241,6 +246,7 @@ export const MODULES: Record<ModuleId, ModuleInfo> = {
     title: 'Transport',
     icon: BusIcon,
     round: 4,
+    live: '/admin/transport',
     summary: 'Buses, routes, stops, drivers and student subscriptions billed through Finance.',
     features: [
     'Buses with capacity, drivers and supervisors',
@@ -266,6 +272,7 @@ export const MODULES: Record<ModuleId, ModuleInfo> = {
     title: 'HR',
     icon: UsersIcon,
     round: 5,
+    live: '/admin/hr/leave',
     summary: 'Contracts, leave and performance reviews for teachers and staff.',
     features: [
     'Employment contracts with type, start / end dates and renewal reminders',
@@ -290,6 +297,7 @@ export const MODULES: Record<ModuleId, ModuleInfo> = {
     title: 'Hostel & Canteen',
     icon: BedDoubleIcon,
     round: 5,
+    live: '/admin/canteen',
     summary: 'Boarding rooms and beds, and a canteen with meal plans and a student wallet.',
     features: [
     'Hostel blocks, rooms and beds; assign boarders',
