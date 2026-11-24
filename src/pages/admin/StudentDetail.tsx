@@ -16,6 +16,9 @@ import { formatDate, relationLabel } from '../../utils/format';
 import { AvatarUploader } from '../../components/ui/AvatarUploader';
 import { StudentParentsCard } from '../../components/admin/ParentStudentLinks';
 import { AdminStudentSection } from '../../components/sections/AdminStudentSection';
+import { StudentAttendanceCard } from '../../components/attendance/StudentAttendanceCard';
+import { GatePassCard } from '../../components/attendance/GatePassCard';
+import { HealthSummaryCard } from '../../components/health/HealthSummaryCard';
 import { Avatar } from '../../components/ui/Avatar';
 import { usePermissions } from '../../hooks/permissions';
 import { PERMISSIONS } from '../../lib/permissions';
@@ -345,6 +348,13 @@ export function AdminStudentDetail() {
 
       </div>
       <AdminStudentSection studentId={studentID} />
+      <StudentAttendanceCard studentId={studentID} who={student?.name.split(' ')[0] ?? 'The student'} />
+      {student &&
+      <div className="mt-5 grid gap-5 lg:grid-cols-3">
+          <HealthSummaryCard student={{ _id: student._id, name: student.name, studentId: student.studentId }} mode="admin" className="lg:col-span-2" />
+          <GatePassCard name={student.name} code={student.studentId} />
+        </div>
+      }
     </>);
 
 }

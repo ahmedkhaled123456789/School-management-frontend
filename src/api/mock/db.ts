@@ -11,7 +11,9 @@
  */
 import { ApiError, kindForStatus } from '../../lib/apiError';
 import type { AuthUser } from '../../types/auth';
-import type { Room, SchoolDay, Section, TimetableEntry } from '../../types/sections';
+import type { Ref, Room, SchoolDay, Section, TimetableEntry } from '../../types/sections';
+import type { AttendanceSettings, GateScan, StaffAttendanceRecord, StoredRegister } from '../../types/attendance';
+import type { ClinicVisit, HealthProfile } from '../../types/health';
 
 const STORAGE_KEY = 'sms.mock.v1';
 const SESSION_USER_KEY = 'sms.user';
@@ -23,6 +25,13 @@ export interface MockDb {
   sections: Section[];
   entries: TimetableEntry[];
   schoolDay: SchoolDay;
+  // attendance & health (added later: older stored data gets empty lists)
+  registers: StoredRegister[];
+  gateScans: GateScan[];
+  staffAttendance: StaffAttendanceRecord[];
+  attendanceSettings: AttendanceSettings;
+  healthProfiles: HealthProfile[];
+  clinicVisits: ClinicVisit[];
 }
 
 /** Sun–Thu, 7 periods of 45 min with a break after the third (Egyptian school day). */
@@ -42,7 +51,34 @@ export function defaultSchoolDay(): SchoolDay {
   };
 }
 
-const emptyDb = (): MockDb => ({ version: 1, rooms: [], sections: [], entries: [], schoolDay: defaultSchoolDay() });
+export const defaultAttendanceSettings = (): AttendanceSettings => ({ staffStart: '07:45', graceMinutes: 10, lockDays: 3 });
+
+const emptyDb = (): MockDb => ({
+  version: 1,
+  rooms: [],
+  sections: [],
+  entries: [],
+  schoolDay: defaultSchoolDay(),
+  registers: [],
+  gateScans: [],
+  staffAttendance: [],
+  attendanceSettings: defaultAttendanceSettings(),
+  healthProfiles: [],
+  clinicVisits: []
+});
+
+/** Adds collections introduced after the data was first stored. */
+function upgrade(db: MockDb): MockDb {
+  return {
+    ...db,
+    registers: Array.isArray(db.registers) ? db.registers : [],
+    gateScans: Array.isArray(db.gateScans) ? db.gateScans : [],
+    staffAttendance: Array.isArray(db.staffAttendance) ? db.staffAttendance : [],
+    attendanceSettings: { ...defaultAttendanceSettings(), ...(db.attendanceSettings ?? {}) },
+    healthProfiles: Array.isArray(db.healthProfiles) ? db.healthProfiles : [],
+    clinicVisits: Array.isArray(db.clinicVisits) ? db.clinicVisits : []
+  };
+}
 
 let memory: MockDb | null = null;
 const listeners = new Set<() => void>();
@@ -60,7 +96,7 @@ function load(): MockDb {
   try {
     const raw = window.localStorage.getItem(STORAGE_KEY);
     const parsed: unknown = raw ? JSON.parse(raw) : null;
-    memory = isMockDb(parsed) ? parsed : emptyDb();
+    memory = isMockDb(parsed) ? upgrade(parsed) : emptyDb();
   } catch {
     // storage blocked or corrupted: keep working in memory
     memory = emptyDb();
@@ -113,6 +149,7 @@ export async function write<T>(apply: (db: MockDb) => T): Promise<T> {
   return clone(result);
 }
 
+/** Clears everything (sections, timetable, attendance, health). */
 export function resetMockDb() {
   memory = emptyDb();
   persist();
@@ -153,4 +190,26 @@ export function requirePermission(permission: string) {
   if (!user.permissions?.includes(permission)) {
     fail(403, 'You do not have permission to perform this action');
   }
+}
+
+/** The signed-in user as a mock server sees the token: role + a display reference. */
+export function sessionActor(): {role: string;ref: Ref;user: AuthUser;} {
+  let user: AuthUser | null = null;
+  let role: string | null = null;
+  try {
+    const raw = window.localStorage.getItem(SESSION_USER_KEY);
+    user = raw ? JSON.parse(raw) as AuthUser : null;
+    role = window.localStorage.getItem(SESSION_ROLE_KEY);
+  } catch {
+    user = null;
+  }
+  if (!user || !role) fail(401, 'Your session has expired. Please sign in again.');
+  return { role, user, ref: { _id: user._id ?? '', name: user.name || user.email || role } };
+}
+
+/** Admin-portal users need the permission; other portals must match `roles`. */
+export function requireRoleOr(permission: string, roles: string[]) {
+  const { role } = sessionActor();
+  if (role === 'admin') return requirePermission(permission);
+  if (!roles.includes(role)) fail(403, 'You do not have permission to perform this action');
 }

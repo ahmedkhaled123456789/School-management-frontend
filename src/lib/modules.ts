@@ -56,6 +56,8 @@ export interface ModuleInfo {
   notes?: string[];
   /** what each portal will get */
   portals: Partial<Record<Role, string>>;
+  /** built: the admin page that replaced the placeholder */
+  live?: string;
 }
 
 export const MODULES: Record<ModuleId, ModuleInfo> = {
@@ -64,6 +66,7 @@ export const MODULES: Record<ModuleId, ModuleInfo> = {
     title: 'Attendance',
     icon: CalendarCheckIcon,
     round: 1,
+    live: '/admin/attendance',
     summary: 'Daily and per-period attendance for students and staff, taken from the timetable, with QR check-in and reports.',
     features: [
     'Teachers take attendance for each period straight from their timetable',
@@ -93,6 +96,7 @@ export const MODULES: Record<ModuleId, ModuleInfo> = {
     title: 'Health Records',
     icon: HeartPulseIcon,
     round: 1,
+    live: '/admin/health',
     summary: "Each student's medical profile: allergies, conditions, vaccinations and clinic visits.",
     features: [
     'Allergies and chronic conditions, highlighted wherever the student appears',

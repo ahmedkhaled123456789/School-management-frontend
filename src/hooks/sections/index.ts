@@ -12,7 +12,7 @@ import type { Ref, RoomPayload, SchoolDay, SectionPayload, StudentRef, Timetable
 import { useSettings } from '../staff';
 
 /** Everything served by the mock API lives under this key. */
-const ROOT = ['mock'] as const;
+export const ROOT = ['mock'] as const;
 const keys = {
   rooms: [...ROOT, 'rooms'] as const,
   sections: (year: string, level?: string) => [...ROOT, 'sections', year, level ?? 'all'] as const,
@@ -42,7 +42,7 @@ export function useMockDbSync() {
 }
 
 /** Mutation + toast + refresh of all mock data (sections, rooms and timetable depend on each other). */
-function useMockMutation<TVars, TResult>(fn: (vars: TVars) => Promise<TResult>, message: string | ((result: TResult) => string) | null) {
+export function useMockMutation<TVars, TResult>(fn: (vars: TVars) => Promise<TResult>, message: string | ((result: TResult) => string) | null) {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: fn,

@@ -1,5 +1,5 @@
 import { useSearchParams } from 'react-router-dom';
-import { BriefcaseIcon, CalendarDaysIcon, GraduationCapIcon, HistoryIcon, LibraryIcon, PrinterIcon, WalletIcon } from 'lucide-react';
+import { BriefcaseIcon, CalendarCheckIcon, CalendarDaysIcon, GraduationCapIcon, HistoryIcon, LibraryIcon, PrinterIcon, WalletIcon } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import { Button } from '../../../components/ui/Button';
 import { Card } from '../../../components/ui/Card';
@@ -11,6 +11,7 @@ import { PERMISSIONS, type Permission } from '../../../lib/permissions';
 import { cn } from '../../../utils/cn';
 import { PERIOD_LABEL, type Period } from '../../../utils/reports';
 import { AcademicReport } from './AcademicReport';
+import { AttendanceReport } from './AttendanceReport';
 import { ActivityReport } from './ActivityReport';
 import { FinanceReport } from './FinanceReport';
 import { StaffReport } from './StaffReport';
@@ -29,6 +30,7 @@ interface Tab {
 // one tab per department; each is shown only to roles that may see its data
 const TABS: Tab[] = [
 { id: 'students', label: 'Students & parents', icon: GraduationCapIcon, permission: PERMISSIONS.STUDENTS_READ, timed: true },
+{ id: 'attendance', label: 'Attendance', icon: CalendarCheckIcon, permission: PERMISSIONS.STUDENTS_READ, timed: true },
 { id: 'academics', label: 'Exams & results', icon: LibraryIcon, permission: PERMISSIONS.ACADEMICS_MANAGE, timed: true },
 { id: 'staff', label: 'Teachers & staff', icon: BriefcaseIcon, permission: PERMISSIONS.TEACHERS_MANAGE, timed: false },
 { id: 'finance', label: 'Finance', icon: WalletIcon, permission: PERMISSIONS.FINANCE_MANAGE, timed: true },
@@ -110,6 +112,7 @@ export function AdminReports() {
 
       <div role="tabpanel" aria-label={active.label}>
         {active.id === 'students' && <StudentsReport period={period} />}
+        {active.id === 'attendance' && <AttendanceReport period={period} />}
         {active.id === 'academics' && <AcademicReport period={period} />}
         {active.id === 'staff' && <StaffReport />}
         {active.id === 'finance' && <FinanceReport period={period} />}

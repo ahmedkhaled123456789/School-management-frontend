@@ -11,6 +11,8 @@ import { useExams } from '../../hooks/exams';
 import { useTeacherProfile } from '../../hooks/teachers';
 import { useTeacherWeek } from '../../hooks/sections';
 import { TodaySchedule } from '../../components/timetable/TodaySchedule';
+import { TeacherLessons } from '../../components/attendance/TeacherLessons';
+import { todayKey } from '../../utils/attendance';
 import { formatDate, relationLabel } from '../../utils/format';
 
 export function TeacherDashboard() {
@@ -67,8 +69,9 @@ export function TeacherDashboard() {
         
       </section>
 
-      <div className="mt-6">
+      <div className="mt-6 grid gap-5 lg:grid-cols-2">
         <TodaySchedule schoolDay={week.schoolDay} entries={week.entries} perspective="teacher" isLoading={week.isLoading} weekHref="/teacher/timetable" emptyText="You have no periods today." />
+        <TeacherLessons academicYear={week.year.id} teacherId={profile.data?._id} date={todayKey()} schoolDay={week.schoolDay} entries={week.entries} isLoading={week.isLoading || profile.isLoading} title="Today's registers" moreHref="/teacher/attendance" />
       </div>
 
       <Card className="mt-6">

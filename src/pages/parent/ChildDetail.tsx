@@ -16,6 +16,8 @@ import type { ChildResult } from '../../types/parentPortal';
 import { formatDate, relationLabel } from '../../utils/format';
 import { ChildFees } from '../../components/parent/ChildFees';
 import { StudentClassCard } from '../../components/sections/StudentClassCard';
+import { StudentAttendanceCard } from '../../components/attendance/StudentAttendanceCard';
+import { HealthSummaryCard } from '../../components/health/HealthSummaryCard';
 
 const PAGE_SIZE = 10;
 
@@ -185,6 +187,8 @@ export function ParentChildDetail() {
       </div>
 
       <StudentClassCard studentId={studentId} />
+      <StudentAttendanceCard studentId={studentId} who={profile?.name.split(' ')[0] ?? 'Your child'} />
+      {profile && <HealthSummaryCard student={{ _id: profile._id, name: profile.name, studentId: profile.studentId }} mode="parent" className="mt-5" />}
       <ChildFees studentId={studentId} />
     </>);
 

@@ -128,14 +128,15 @@ export function ModulePlaceholder({ module: moduleId, page }: {module: ModuleId;
                     <span
                     className={cn(
                       'grid h-6 w-6 shrink-0 place-items-center rounded-full text-[11.5px] font-bold',
-                      round === info.round ? 'bg-primary-600 text-white' : 'bg-ink-100 text-ink-500'
+                      round === info.round ? 'bg-primary-600 text-white' : MODULE_LIST.filter((m) => m.round === round).every((m) => m.live) ? 'bg-success-500 text-white' : 'bg-ink-100 text-ink-500'
                     )}>
                       {round}
                     </span>
                     <span className="text-[13px] leading-6 text-ink-700">
                       {MODULE_LIST.filter((m) => m.round === round).map((m) =>
                     <span key={m.id} className={cn(m.id === moduleId && 'font-bold text-ink-900')}>
-                          {m.title}
+                          {m.live && role === 'admin' ? <Link to={m.live} className="text-primary-700 underline-offset-2 hover:underline">{m.title}</Link> : m.title}
+                          {m.live && <span className="ms-1 rounded-full bg-success-50 px-1.5 text-[10.5px] font-bold uppercase text-success-600">Live</span>}
                         </span>
                     ).reduce<ReactNode[]>((acc, el, i) => i ? [...acc, ' + ', el] : [el], [])}
                     </span>

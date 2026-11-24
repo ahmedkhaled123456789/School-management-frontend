@@ -67,6 +67,15 @@ import { ParentDashboard } from './pages/parent/Dashboard';
 import { ParentChildDetail } from './pages/parent/ChildDetail';
 import { ParentProfilePage } from './pages/parent/Profile';
 import { ModulePlaceholder } from './pages/ModulePlaceholder';
+import { AdminAttendance } from './pages/admin/attendance/Attendance';
+import { AdminAttendanceGate } from './pages/admin/attendance/Gate';
+import { RegisterPage } from './pages/attendance/RegisterPage';
+import { AdminStaffAttendance } from './pages/admin/hr/StaffAttendance';
+import { AdminHealth } from './pages/admin/health/Health';
+import { AdminStudentHealth } from './pages/admin/health/StudentHealth';
+import { TeacherAttendance } from './pages/teacher/Attendance';
+import { StudentAttendancePage } from './pages/student/Attendance';
+import { ParentAttendancePage } from './pages/parent/Attendance';
 import { ADMIN_NAV, PARENT_NAV, STUDENT_NAV, TEACHER_NAV, plannedRoutes, type NavEntry } from './components/layout/navigation';
 
 /** Placeholder pages for the planned modules listed in a portal's sidebar. */
@@ -118,6 +127,11 @@ export function App() {
                   <Route path="students" element={<AdminStudents />} />
                   <Route path="students/:studentID" element={<AdminStudentDetail />} />
                   <Route path="parents" element={<AdminParents />} />
+                  <Route path="attendance" element={<AdminAttendance />} />
+                  <Route path="attendance/register" element={<RegisterPage />} />
+                  <Route path="attendance/gate" element={<AdminAttendanceGate />} />
+                  <Route path="health" element={<AdminHealth />} />
+                  <Route path="health/:studentId" element={<AdminStudentHealth />} />
                 </Route>
                 <Route element={<RequirePermission permission={PERMISSIONS.TEACHERS_MANAGE} />}>
                   <Route path="teachers" element={<AdminTeachers />} />
@@ -154,6 +168,7 @@ export function App() {
                 </Route>
                 <Route element={<RequirePermission permission={PERMISSIONS.STAFF_MANAGE} />}>
                   <Route path="staff" element={<AdminStaff />} />
+                  <Route path="hr/attendance" element={<AdminStaffAttendance />} />
                 </Route>
                 <Route element={<RequirePermission permission={PERMISSIONS.AUDIT_READ} />}>
                   <Route path="audit-log" element={<AdminAuditLog />} />
@@ -176,6 +191,8 @@ export function App() {
                 <Route path="questions" element={<TeacherQuestions />} />
                 <Route path="timetable" element={<TeacherTimetable />} />
                 <Route path="sections" element={<TeacherMySections />} />
+                <Route path="attendance" element={<TeacherAttendance />} />
+                <Route path="attendance/register" element={<RegisterPage />} />
                 <Route path="profile" element={<TeacherProfile />} />
                 {plannedModuleRoutes(TEACHER_NAV)}
               </Route>
@@ -189,6 +206,7 @@ export function App() {
                 <Route index element={<StudentDashboard />} />
                 <Route path="profile" element={<StudentProfilePage />} />
                 <Route path="timetable" element={<StudentTimetablePage />} />
+                <Route path="attendance" element={<StudentAttendancePage />} />
                 <Route path="exams" element={<StudentExams />} />
                 <Route path="results" element={<StudentResults />} />
                 <Route path="results/:resultID" element={<StudentResultDetail />} />
@@ -202,6 +220,7 @@ export function App() {
                 <Route index element={<ParentDashboard />} />
                 <Route path="children/:studentId" element={<ParentChildDetail />} />
                 <Route path="profile" element={<ParentProfilePage />} />
+                <Route path="attendance" element={<ParentAttendancePage />} />
                 {plannedModuleRoutes(PARENT_NAV)}
               </Route>
               {/* printable documents: outside the dashboard chrome */}

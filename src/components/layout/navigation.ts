@@ -107,8 +107,8 @@ export const ADMIN_NAV: NavEntry[] = [
   { label: 'All Students', to: '/admin/students', icon: GraduationCapIcon, permission: P.STUDENTS_READ },
   { label: 'Parents', to: '/admin/parents', icon: UsersRoundIcon, permission: P.STUDENTS_READ },
   { label: 'Admissions', to: '/admin/admissions', icon: UserPlusIcon, permission: P.STUDENTS_READ, module: 'admissions' },
-  { label: 'Attendance', to: '/admin/attendance', icon: CalendarCheckIcon, permission: P.STUDENTS_READ, module: 'attendance' },
-  { label: 'Health', to: '/admin/health', icon: HeartPulseIcon, permission: P.STUDENTS_READ, module: 'health' },
+  { label: 'Attendance', to: '/admin/attendance', icon: CalendarCheckIcon, permission: P.STUDENTS_READ },
+  { label: 'Health', to: '/admin/health', icon: HeartPulseIcon, permission: P.STUDENTS_READ },
   { label: 'Certificates', to: '/admin/certificates', icon: IdCardIcon, permission: P.STUDENTS_READ, module: 'certificates' }]
 
 },
@@ -139,7 +139,7 @@ export const ADMIN_NAV: NavEntry[] = [
   children: [
   { label: 'Teachers', to: '/admin/teachers', icon: UsersIcon, permission: P.TEACHERS_MANAGE },
   { label: 'Staff Accounts', to: '/admin/staff', icon: BriefcaseIcon, permission: P.STAFF_MANAGE },
-  { label: 'Attendance', to: '/admin/hr/attendance', icon: UserCheckIcon, permission: P.STAFF_MANAGE, module: 'attendance' },
+  { label: 'Attendance', to: '/admin/hr/attendance', icon: UserCheckIcon, permission: P.STAFF_MANAGE },
   { label: 'Contracts', to: '/admin/hr/contracts', icon: FileSignatureIcon, permission: P.STAFF_MANAGE, module: 'hr' },
   { label: 'Leave', to: '/admin/hr/leave', icon: PlaneIcon, permission: P.STAFF_MANAGE, module: 'hr' },
   { label: 'Performance', to: '/admin/hr/performance', icon: TrendingUpIcon, permission: P.STAFF_MANAGE, module: 'hr' }]
@@ -202,7 +202,7 @@ export const TEACHER_NAV: NavItem[] = [
 { label: 'My Exams', to: '/teacher/exams', icon: ClipboardListIcon },
 { label: 'Create Exam', to: '/teacher/exams/new', icon: PlusSquareIcon },
 { label: 'Questions', to: '/teacher/questions', icon: FileQuestionIcon },
-{ label: 'Attendance', to: '/teacher/attendance', icon: CalendarCheckIcon, module: 'attendance' },
+{ label: 'Attendance', to: '/teacher/attendance', icon: CalendarCheckIcon },
 { label: 'Online Classes', to: '/teacher/online-classes', icon: VideoIcon, module: 'online-classes' },
 { label: 'Messages', to: '/teacher/messages', icon: MessagesSquareIcon, module: 'communication' },
 { label: 'Leave', to: '/teacher/leave', icon: PlaneIcon, module: 'hr' },
@@ -215,7 +215,7 @@ export const STUDENT_NAV: NavItem[] = [
 { label: 'My Profile', to: '/student/profile', icon: UserCogIcon },
 { label: 'My Exams', to: '/student/exams', icon: ClipboardListIcon },
 { label: 'Exam Results', to: '/student/results', icon: AwardIcon },
-{ label: 'Attendance', to: '/student/attendance', icon: CalendarCheckIcon, module: 'attendance' },
+{ label: 'Attendance', to: '/student/attendance', icon: CalendarCheckIcon },
 { label: 'Online Classes', to: '/student/online-classes', icon: VideoIcon, module: 'online-classes' },
 { label: 'Library', to: '/student/library', icon: LibraryBigIcon, module: 'library' },
 { label: 'Announcements', to: '/student/announcements', icon: MegaphoneIcon, module: 'communication' }];
@@ -223,7 +223,7 @@ export const STUDENT_NAV: NavItem[] = [
 
 export const PARENT_NAV: NavItem[] = [
 { label: 'My Children', to: '/parent', icon: LayoutDashboardIcon, end: true },
-{ label: 'Attendance', to: '/parent/attendance', icon: CalendarCheckIcon, module: 'attendance' },
+{ label: 'Attendance', to: '/parent/attendance', icon: CalendarCheckIcon },
 { label: 'Messages', to: '/parent/messages', icon: MessagesSquareIcon, module: 'communication' },
 { label: 'Events', to: '/parent/events', icon: PartyPopperIcon, module: 'events' },
 { label: 'Transport', to: '/parent/transport', icon: BusIcon, module: 'transport' },

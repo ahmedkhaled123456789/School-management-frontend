@@ -243,7 +243,7 @@ export function AdminSections() {
       <ConfirmDialog
         open={confirmReset}
         title="Clear all demo data?"
-        message="Sections, rooms, the school day and the timetable stored in this browser are removed. Real students, teachers and subjects are not touched."
+        message="Sections, rooms, the school day, the timetable, attendance registers, gate check-ins, staff attendance and health records stored in this browser are removed. Real students, teachers and subjects are not touched."
         confirmLabel="Clear demo data"
         tone="danger"
         onCancel={() => setConfirmReset(false)}

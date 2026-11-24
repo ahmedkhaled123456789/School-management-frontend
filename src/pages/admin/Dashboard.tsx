@@ -26,6 +26,9 @@ import { useSubjects } from '../../hooks/subjects';
 import { useTeachers } from '../../hooks/teachers';
 import { formatDate, relationLabel } from '../../utils/format';
 import { Avatar } from '../../components/ui/Avatar';
+import { useAttendanceStats } from '../../hooks/attendance';
+import { useCurrentAcademicYear } from '../../hooks/sections';
+import { addDays, rateOf, todayKey } from '../../utils/attendance';
 
 const RECENT_PARAMS = { page: 1, limit: 5 };
 
@@ -37,6 +40,10 @@ export function AdminDashboard() {
   const classLevels = useClassLevels();
   const academicYears = useAcademicYears();
   const examResults = useExamResults();
+  const year = useCurrentAcademicYear();
+  const attendance = useAttendanceStats(year.id, addDays(todayKey(), -29), todayKey());
+  const attendanceTally = attendance.data?.tally;
+  const lastDay = attendance.data?.byDate[attendance.data.byDate.length - 1];
 
   const recentStudents = (students.data?.items ?? []).slice(0, 5);
   const recentTeachers = (teachers.data?.items ?? []).slice(0, 5);
@@ -124,11 +131,13 @@ export function AdminDashboard() {
           } />
         
         <StatCard
-          label="Attendance rate"
-          value={null}
+          label="Attendance (30 days)"
+          value={attendanceTally?.total ? `${rateOf(attendanceTally)}%` : '—'}
           icon={<ListChecksIcon className="h-4 w-4" aria-hidden="true" />}
-          isUnavailable
-          hint="No attendance endpoint exists in the API contract." />
+          to="/admin/attendance"
+          isLoading={year.isLoading || attendance.isLoading && Boolean(year.id)}
+          isUnavailable={attendance.isError}
+          hint={lastDay ? `${rateOf(lastDay.tally)}% on the last day recorded` : 'No registers taken yet'} />
         
       </section>
 
