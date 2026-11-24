@@ -19,11 +19,12 @@ import type {
   StudentSelfUpdatePayload } from
 '../../types/student';
 
-export function useStudents(params: ListParams) {
+export function useStudents(params: ListParams, enabled = true) {
   return useQuery({
     queryKey: queryKeys.students(params),
     queryFn: ({ signal }) => listStudents(params, signal),
-    placeholderData: keepPreviousData
+    placeholderData: keepPreviousData,
+    enabled
   });
 }
 
@@ -35,10 +36,11 @@ export function useStudent(studentID?: string) {
   });
 }
 
-export function useStudentProfile() {
+export function useStudentProfile(enabled = true) {
   return useQuery({
     queryKey: queryKeys.studentProfile,
-    queryFn: ({ signal }) => getStudentProfile(signal)
+    queryFn: ({ signal }) => getStudentProfile(signal),
+    enabled
   });
 }
 

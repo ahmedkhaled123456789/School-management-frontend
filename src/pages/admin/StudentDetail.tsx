@@ -14,6 +14,14 @@ import { usePrograms } from '../../hooks/programs';
 import { useStudent, useUpdateStudent } from '../../hooks/students';
 import { formatDate, relationLabel } from '../../utils/format';
 import { AvatarUploader } from '../../components/ui/AvatarUploader';
+import { StudentParentsCard } from '../../components/admin/ParentStudentLinks';
+import { AdminStudentSection } from '../../components/sections/AdminStudentSection';
+import { StudentAttendanceCard } from '../../components/attendance/StudentAttendanceCard';
+import { GatePassCard } from '../../components/attendance/GatePassCard';
+import { HealthSummaryCard } from '../../components/health/HealthSummaryCard';
+import { Avatar } from '../../components/ui/Avatar';
+import { usePermissions } from '../../hooks/permissions';
+import { PERMISSIONS } from '../../lib/permissions';
 import { emailField, requiredField, type Errors } from '../../utils/validation';
 
 interface EditValues {
@@ -49,7 +57,8 @@ export function AdminStudentDetail() {
 
   const [values, setValues] = useState<EditValues>(EMPTY);
   const [errors, setErrors] = useState<Errors<EditValues>>({});
-  const [isEditing, setIsEditing] = useState(searchParams.get('edit') === '1');
+  const canManage = usePermissions().can(PERMISSIONS.STUDENTS_MANAGE);
+  const [isEditing, setIsEditing] = useState(searchParams.get('edit') === '1' && canManage);
 
   const student = query.data;
 
@@ -137,7 +146,7 @@ export function AdminStudentDetail() {
         { label: student?.name ?? 'Detail' }]
         }
         actions={
-        !query.isLoading &&
+        !query.isLoading && canManage &&
         <Button
           variant={isEditing ? 'secondary' : 'primary'}
           onClick={() => setIsEditing((prev) => !prev)}>
@@ -159,11 +168,15 @@ export function AdminStudentDetail() {
 
             <>
                 <div className="flex items-center gap-3">
-                  <AvatarUploader
-                    image={student?.image}
-                    name={student?.name}
-                    isSaving={update.isPending}
-                    onChange={(image) => update.mutateAsync({ image })} />
+                  {canManage ?
+                <AvatarUploader
+                  image={student?.image}
+                  name={student?.name}
+                  isSaving={update.isPending}
+                  onChange={(image) => update.mutateAsync({ image })} /> :
+
+                <Avatar image={student?.image} name={student?.name} size="lg" />
+                }
                   <div className="min-w-0">
                     <p className="truncate text-[15px] font-bold text-ink-900">{student?.name}</p>
                     <p className="truncate font-mono text-[12px] text-ink-500">
@@ -325,6 +338,23 @@ export function AdminStudentDetail() {
           </CardBody>
         </Card>
       </div>
+
+      <div className="mt-5">
+        <StudentParentsCard
+          studentId={studentID}
+          parents={student?.parents}
+          isLoading={query.isLoading}
+          readOnly={!canManage} />
+
+      </div>
+      <AdminStudentSection studentId={studentID} />
+      <StudentAttendanceCard studentId={studentID} who={student?.name.split(' ')[0] ?? 'The student'} />
+      {student &&
+      <div className="mt-5 grid gap-5 lg:grid-cols-3">
+          <HealthSummaryCard student={{ _id: student._id, name: student.name, studentId: student.studentId }} mode="admin" className="lg:col-span-2" />
+          <GatePassCard name={student.name} code={student.studentId} />
+        </div>
+      }
     </>);
 
 }

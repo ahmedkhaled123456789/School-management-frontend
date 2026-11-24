@@ -20,11 +20,12 @@ import type {
   TeacherSelfUpdatePayload } from
 '../../types/teacher';
 
-export function useTeachers(params: ListParams) {
+export function useTeachers(params: ListParams, enabled = true) {
   return useQuery({
     queryKey: queryKeys.teachers(params),
     queryFn: ({ signal }) => listTeachers(params, signal),
-    placeholderData: keepPreviousData
+    placeholderData: keepPreviousData,
+    enabled
   });
 }
 
@@ -36,10 +37,11 @@ export function useTeacher(teacherID?: string) {
   });
 }
 
-export function useTeacherProfile() {
+export function useTeacherProfile(enabled = true) {
   return useQuery({
     queryKey: queryKeys.teacherProfile,
-    queryFn: ({ signal }) => getTeacherProfile(signal)
+    queryFn: ({ signal }) => getTeacherProfile(signal),
+    enabled
   });
 }
 

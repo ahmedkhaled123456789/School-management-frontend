@@ -2,7 +2,11 @@ import type { ListParams } from '../types/common';
 
 /** Single source of truth for every React Query key used in the app. */
 export const queryKeys = {
+  me: ['me'] as const,
   admins: ['admins'] as const,
+  staff: ['staff'] as const,
+  settings: ['settings'] as const,
+  auditLogs: (params: ListParams) => ['auditLogs', params] as const,
   adminProfile: ['adminProfile'] as const,
 
   students: (params: ListParams) => ['students', params] as const,
@@ -45,8 +49,27 @@ export const queryKeys = {
 
   parents: ['parents'] as const,
   parent: (id: string) => ['parent', id] as const,
-  feesGroups: ['feesGroups'] as const,
-  feesGroup: (id: string) => ['feesGroup', id] as const,
+
+  // parent portal (signed-in parent)
+  parentProfile: ['parentProfile'] as const,
+  myChildrenRoot: ['myChildren'] as const,
+  myChildren: (params: ListParams) => ['myChildren', params] as const,
+  myChild: (studentId: string) => ['myChild', studentId] as const,
+  myChildResults: (studentId: string, params: ListParams) =>
+  ['myChildResults', studentId, params] as const,
+
+  // finance: everything below starts with 'finance' so one invalidation refreshes it all
+  financeRoot: ['finance'] as const,
+  feeItems: ['finance', 'feeItems'] as const,
+  feeStructures: (params: ListParams) => ['finance', 'feeStructures', params] as const,
+  discounts: ['finance', 'discounts'] as const,
+  invoices: (params: ListParams) => ['finance', 'invoices', params] as const,
+  invoice: (id: string) => ['finance', 'invoice', id] as const,
+  payments: (params: ListParams) => ['finance', 'payments', params] as const,
+  payment: (id: string) => ['finance', 'payment', id] as const,
+  outstanding: (params: ListParams) => ['finance', 'outstanding', params] as const,
+  collections: (params: ListParams) => ['finance', 'collections', params] as const,
+  childInvoices: (studentId: string) => ['finance', 'childInvoices', studentId] as const,
   expenses: ['expenses'] as const,
   expense: (id: string) => ['expense', id] as const
 };

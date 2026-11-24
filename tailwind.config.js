@@ -19,26 +19,9 @@ export default {
           800: '#22303C',
           900: '#0F1B2B',
         },
-        primary: {
-          50: '#EEF4F8',
-          100: '#D6E5EE',
-          200: '#A9C7DA',
-          300: '#74A3BF',
-          400: '#4A82A3',
-          500: '#2D6486',
-          600: '#1B4965',
-          700: '#163C53',
-          800: '#122F41',
-          900: '#0D2231',
-        },
-        accent: {
-          50: '#FDF6EA',
-          100: '#F8E7C6',
-          200: '#F0CE8C',
-          300: '#E2A03F',
-          400: '#C9862A',
-          500: '#A66C1E',
-        },
+        // themeable (Branding page): RGB channels in CSS variables, see index.css
+        primary: Object.fromEntries([50, 100, 200, 300, 400, 500, 600, 700, 800, 900].map((step) => [step, `rgb(var(--primary-${step}) / <alpha-value>)`])),
+        accent: Object.fromEntries([50, 100, 200, 300, 400, 500].map((step) => [step, `rgb(var(--accent-${step}) / <alpha-value>)`])),
         success: {
           50: '#ECF7F0',
           100: '#CFEBDA',
@@ -58,8 +41,13 @@ export default {
         },
       },
       fontFamily: {
-        sans: ['"Plus Jakarta Sans"', 'system-ui', '-apple-system', 'sans-serif'],
+        sans: ['var(--font-sans)'],
         mono: ['"IBM Plex Mono"', 'ui-monospace', 'monospace'],
+      },
+      borderRadius: {
+        lg: 'var(--radius-lg)',
+        xl: 'var(--radius-xl)',
+        '2xl': 'var(--radius-2xl)',
       },
       boxShadow: {
         card: '0 1px 2px rgba(15,27,43,0.05), 0 1px 3px rgba(15,27,43,0.05)',

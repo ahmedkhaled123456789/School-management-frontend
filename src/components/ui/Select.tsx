@@ -38,7 +38,7 @@ export function Select({
           className={cn(
             controlClasses,
             controlState(Boolean(error)),
-            'h-10 appearance-none pr-9',
+            'h-10 appearance-none pe-9',
             className
           )}
           {...rest}>
@@ -51,7 +51,7 @@ export function Select({
           )}
         </select>
         <ChevronDownIcon
-          className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-ink-400"
+          className="pointer-events-none absolute end-3 top-1/2 h-4 w-4 -translate-y-1/2 text-ink-400"
           aria-hidden="true" />
         
       </div>

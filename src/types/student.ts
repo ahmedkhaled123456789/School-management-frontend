@@ -30,6 +30,17 @@ export interface Student extends Timestamped {
   status?: boolean;
   fatherEmail?: string;
   image?: string;
+  /** Populated by GET /students/:studentID/admin; plain ids elsewhere. */
+  parents?: Array<string | StudentParentRef>;
+}
+
+export interface StudentParentRef {
+  _id: string;
+  name?: string;
+  email?: string;
+  phone?: string;
+  parentId?: string;
+  image?: string;
 }
 
 export interface CreateStudentPayload {

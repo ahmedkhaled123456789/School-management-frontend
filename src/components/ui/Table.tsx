@@ -59,7 +59,7 @@ export function DataTable<T>({
           <div className="h-full w-1/3 animate-[shimmer_1.1s_linear_infinite] bg-primary-500" />
         </div>
       }
-      <table className="w-full min-w-[720px] border-collapse text-left text-sm">
+      <table className="w-full min-w-[720px] border-collapse text-start text-sm">
         {caption && <caption className="sr-only">{caption}</caption>}
         <thead>
           <tr className="border-b border-ink-200 bg-ink-50/70">
@@ -69,7 +69,7 @@ export function DataTable<T>({
               scope="col"
               className={cn(
                 'whitespace-nowrap px-4 py-3 text-[11.5px] font-bold uppercase tracking-wider text-ink-500',
-                column.align === 'right' && 'text-right',
+                column.align === 'right' && 'text-end',
                 column.className
               )}>
               
@@ -96,7 +96,7 @@ export function DataTable<T>({
               key={column.key}
               className={cn(
                 'px-4 py-3.5 align-middle text-ink-700',
-                column.align === 'right' && 'text-right',
+                column.align === 'right' && 'text-end',
                 column.className
               )}>
               
